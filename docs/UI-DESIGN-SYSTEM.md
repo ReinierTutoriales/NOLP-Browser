@@ -68,3 +68,6 @@ Solo dos opciones visibles: Claro y Oscuro. No añadir temas de colores, modo au
 - Cambiar de local a online requiere consentimiento granular por categoría de datos; **nunca subir contraseñas, historial, marcadores ni claves automáticamente**. Cambiar a local deshabilita sincronización y revoca sesiones/tokens según capacidades oficiales, sin borrar datos locales sin confirmación.
 - Ambos controles son reversibles, con estado persistido localmente, migraciones seguras y pruebas de privacidad/red. El filtro anti-IA no debe interferir con la autenticación oficial por defecto; documentar excepciones mínimas.
 - **Estado:** requisitos documentados, sin implementación funcional ni validación.
+
+## Implementación multiplataforma normativa
+Consultar `docs/UI-CROSS-PLATFORM-ARCHITECTURE.md`. Compartir tokens semánticos, estado y comportamiento, pero adaptar el renderer a cada plataforma. Desktop conserva Firefox Chrome UI; Android/TV evalúa Compose con GeckoView. El compositor y las animaciones no deben bloquear navegación ni vídeo. Contratos tipados, eventos incrementales y accesibilidad son requisitos, no funcionalidades ya implementadas.
