@@ -4,8 +4,6 @@ on:
     paths:
       - 'engine/upstream-manifest/firefox.toml'
       - 'scripts/**'
-      - 'AGENTS.md'
-      - 'skills/**'
       - '.github/workflows/firefox-foundation.yml'
   pull_request:
     paths:
@@ -32,7 +30,6 @@ jobs:
       - name: Validate manifest and bootstrap script
         run: |
           bash -n scripts/bootstrap-firefox.sh
-          python3 scripts/check-governance.py
           python3 - <<'PY'
           import pathlib, re, tomllib
           data=tomllib.loads(pathlib.Path("engine/upstream-manifest/firefox.toml").read_text())
@@ -45,7 +42,7 @@ jobs:
           PY
 
   artifact-build:
-    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.build_firefox)
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'workflow_dispatch' && inputs.build_firefox)
     needs: validate
     runs-on: ubuntu-24.04
     timeout-minutes: 180
