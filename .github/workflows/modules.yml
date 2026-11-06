@@ -24,21 +24,55 @@ permissions:
   contents: read
 
 jobs:
-  module-contracts:
+  manifest:
+    name: Validate module graph and lockfile inventory
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - name: Validate declared module boundaries
-        run: python3 scripts/check-modules.py
-      - name: Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
+      - run: python3 scripts/check-modules.py
+
+  rust-format:
+    name: Rust formatting (committed files)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
         with:
-          components: clippy, rustfmt
-      - name: Enforce committed Rust formatting
-        run: cargo fmt --all -- --check
-      - name: Lint Rust workspace
-        run: cargo clippy --workspace --all-targets --locked -- -D warnings
-      - name: Test Rust workspace
-        run: cargo test --workspace --locked
-      - name: Test offline network policy prototype
-        run: python3 -m unittest discover -s tests -p 'test_network_policy.py' -v
+          components: rustfmt
+      - run: cargo fmt --all -- --check
+
+  rust-build:
+    name: Rust dependency resolution and compilation
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Validate lockfile and workspace metadata
+        run: cargo metadata --locked --offline --format-version 1 --no-deps > /dev/null
+      - name: Compile all crates and test targets
+        run: cargo check --workspace --all-targets --locked --offline
+
+  rust-clippy:
+    name: Rust Clippy strict
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - run: cargo clippy --workspace --all-targets --locked --offline -- -D warnings
+
+  rust-tests:
+    name: Rust unit and integration tests
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo test --workspace --locked --offline
+
+  python-tests:
+    name: Offline Python network-policy tests
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 -m unittest discover -s tests -p 'test_network_policy.py' -v
