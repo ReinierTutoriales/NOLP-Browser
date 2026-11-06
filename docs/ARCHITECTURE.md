@@ -7,6 +7,9 @@
 - Android móvil y Android TV: GeckoView con adaptadores y UI específicos; evaluar Android Components donde aporte valor.
 - iOS/iPadOS: sujeto a restricciones técnicas y regulatorias de distribución; no prometer compatibilidad Gecko.
 
+## Sistema visual
+La UI NOLP tendrá dos temas exclusivamente: **Aero Light** y **Aero Dark**, con cristal translúcido y fallback opaco accesible. Contratos y criterios en `docs/UI-DESIGN-SYSTEM.md`. La transparencia se limita al chrome UI y se optimiza por plataforma.
+
 ## Capas
 1. Aplicaciones: UI escritorio, táctil y TV, con accesibilidad y controles nativos.
 2. Núcleo compartido: políticas de privacidad, filtrado, seguridad, configuración local, vault, red, actualizaciones y rendimiento.
