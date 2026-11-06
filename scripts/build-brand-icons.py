@@ -14,17 +14,19 @@ ICO_SIZES = (16, 24, 32, 48, 64, 128, 256)
 
 
 def build(source: Path, output: Path) -> None:
-    import cairosvg
     from PIL import Image
 
     output.mkdir(parents=True, exist_ok=True)
     png_dir = output / "png"
     png_dir.mkdir(exist_ok=True)
-    svg = source.read_bytes()
+    with Image.open(source) as original:
+        master = original.convert("RGBA")
+        master.load()
+    if master.getpixel((0, 0))[3] != 0:
+        raise ValueError("Official source logo must have transparent corners")
     images = {}
     for size in SIZES:
-        data = cairosvg.svg2png(bytestring=svg, output_width=size, output_height=size)
-        img = Image.open(io.BytesIO(data)).convert("RGBA")
+        img = master.resize((size, size), Image.Resampling.LANCZOS)
         if img.size != (size, size):
             raise ValueError(f"Unexpected icon dimensions: {img.size}")
         if img.getpixel((0, 0))[3] != 0:
@@ -39,7 +41,8 @@ def build(source: Path, output: Path) -> None:
     # Linux desktop icon: scalable source plus freedesktop.org hicolor PNG hierarchy.
     scalable = output / "linux" / "hicolor" / "scalable" / "apps"
     scalable.mkdir(parents=True, exist_ok=True)
-    (scalable / "nolp.svg").write_bytes(svg)
+    # PNG is the official raster master. Do not invent a vector substitute.
+    scalable.rmdir()
     for size in (16, 24, 32, 48, 64, 128, 256, 512):
         directory = output / "linux" / "hicolor" / f"{size}x{size}" / "apps"
         directory.mkdir(parents=True, exist_ok=True)
@@ -52,7 +55,7 @@ def build(source: Path, output: Path) -> None:
     # Web/PWA favicon source and portable high-DPI PNG.
     web = output / "web"
     web.mkdir(exist_ok=True)
-    (web / "favicon.svg").write_bytes(svg)
+    # Preserve the exact supplied design; favicon PNG is used instead of a substitute SVG.
     for size in (32, 192, 512):
         images[size].save(web / f"nolp-{size}.png")
     print(f"Generated icon pack in {output}")
@@ -60,7 +63,7 @@ def build(source: Path, output: Path) -> None:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--source", type=Path, default=Path("assets/brand/nolp-icon.svg"))
+    parser.add_argument("--source", type=Path, default=Path("assets/brand/nolp-official.png"))
     parser.add_argument("--output", type=Path, default=Path("dist/nolp-icons"))
     args = parser.parse_args()
     build(args.source, args.output)
