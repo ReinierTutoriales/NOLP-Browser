@@ -31,6 +31,7 @@ jobs:
         run: |
           bash -n scripts/bootstrap-firefox.sh
           bash -n scripts/smoke-firefox.sh
+          bash -n scripts/smoke-gecko-navigation.sh
           python3 - <<'PY'
           import pathlib, re, tomllib
           data=tomllib.loads(pathlib.Path("engine/upstream-manifest/firefox.toml").read_text())
@@ -85,6 +86,9 @@ jobs:
         run: |
           ./mach run --version
           echo 'Version smoke passed; no web navigation verified.'
+      - name: Render local HTML in isolated Gecko profile
+        working-directory: .
+        run: bash scripts/smoke-gecko-navigation.sh
       - name: Preserve failure diagnostics
         if: failure()
         run: |
