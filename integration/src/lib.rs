@@ -12,21 +12,32 @@ pub fn evaluate_local(host: &str) -> Verdict {
     chain.add(NetworkPolicy::new(["tracker.example".into()], []));
     chain.add(HostBlocker::new(["ads.example".into()]));
     chain.add(AntiAi::new(["ai.example".into()]));
-    chain.evaluate(&Request { host, private: false })
+    chain.evaluate(&Request {
+        host,
+        private: false,
+    })
 }
-pub fn integration_ready() -> bool { GeckoAdapter::not_integrated().available() }
-pub fn selected_theme() -> Theme { AeroSurface::new(Theme::AeroDark).theme() }
+pub fn integration_ready() -> bool {
+    GeckoAdapter::not_integrated().available()
+}
+pub fn selected_theme() -> Theme {
+    AeroSurface::new(Theme::AeroDark).theme()
+}
 
-#[cfg(test)] mod tests {
+#[cfg(test)]
+mod tests {
     use super::*;
     use nolp_contracts::Decision;
-    #[test] fn policy_modules_compose() {
+
+    #[test]
+    fn policy_modules_compose() {
         for host in ["tracker.example", "ads.example", "ai.example"] {
             assert_eq!(evaluate_local(host).decision, Decision::Block);
         }
         assert_eq!(evaluate_local("mozilla.org").decision, Decision::Allow);
     }
-    #[test] fn no_false_browser_ready() {
+    #[test]
+    fn no_false_browser_ready() {
         assert!(!integration_ready());
         assert_eq!(selected_theme(), Theme::AeroDark);
     }
