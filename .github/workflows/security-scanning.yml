@@ -42,8 +42,9 @@ jobs:
       - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
         with:
           go-version: 'stable'
+          cache: false
       - name: Install reviewed Gitleaks release
-        run: go install github.com/gitleaks/gitleaks/v8@v8.30.1
+        run: go install github.com/zricethezav/gitleaks/v8@v8.30.1
       - name: Scan repository history and working tree
         run: |
           "$(go env GOPATH)/bin/gitleaks" git --redact --exit-code 1 --log-opts="--all" .
