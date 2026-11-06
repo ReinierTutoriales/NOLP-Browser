@@ -76,6 +76,10 @@ Si existe conflicto, priorizar protección del usuario y compatibilidad de segur
 - Cada optimización requiere hipótesis, línea base, métrica reproducible, comparación y rollback. La innovación debe resolver un problema real, no añadir complejidad sin evidencia.
 - Actualizar documentación, pines, lockfiles, SBOM y matriz de CI cuando cambien dependencias o contratos. Registrar qué se probó y qué no.
 
+## Política Gecko-native de interfaz e identidad
+- Aplicar `docs/GECKO-NATIVE-UI-POLICY.md` a cualquier cambio de interfaz: reutilizar primero Firefox Chrome UI y composición nativa, mantener identidad NOLP propia y evitar frameworks duplicados.
+- Los materiales de sistema son adaptativos; no introducirlos sin prueba real en Firefox y comparación de rendimiento. Dos temas: NOLP Dark y NOLP Light.
+
 ## Identidad visual obligatoria
 - Seguir `docs/UI-DESIGN-SYSTEM.md`: únicamente Aero Light y Aero Dark, ambos translúcidos con fallback opaco seguro.
 - No introducir temas extra, skins heredadas ni efectos costosos sin benchmarks. La accesibilidad puede reducir transparencia y movimiento sin constituir otro tema.
