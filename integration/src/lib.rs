@@ -7,6 +7,7 @@ use nolp_engine_gecko::GeckoAdapter;
 use nolp_network_policy::NetworkPolicy;
 use nolp_ui_aero::AeroSurface;
 
+/// Offline policy composition prototype; never intercepts browser traffic.
 pub fn evaluate_local(host: &str) -> Verdict {
     let mut chain = PolicyChain::new();
     chain.add(NetworkPolicy::new(["tracker.example".into()], []));
@@ -16,6 +17,18 @@ pub fn evaluate_local(host: &str) -> Verdict {
         host,
         private: false,
     })
+}
+/// Production-facing gate: an unintegrated Gecko engine cannot navigate.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum StartupError {
+    EngineUnavailable,
+}
+pub fn start_browser() -> Result<(), StartupError> {
+    if integration_ready() {
+        Ok(())
+    } else {
+        Err(StartupError::EngineUnavailable)
+    }
 }
 pub fn integration_ready() -> bool {
     GeckoAdapter::not_integrated().available()
@@ -39,6 +52,7 @@ mod tests {
     #[test]
     fn no_false_browser_ready() {
         assert!(!integration_ready());
+        assert_eq!(start_browser(), Err(StartupError::EngineUnavailable));
         assert_eq!(selected_theme(), Theme::AeroDark);
     }
 }
