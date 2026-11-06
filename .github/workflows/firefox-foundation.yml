@@ -42,7 +42,7 @@ jobs:
           PY
 
   artifact-build:
-    if: github.event_name == 'workflow_dispatch' && inputs.build_firefox
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.build_firefox)
     needs: validate
     runs-on: ubuntu-24.04
     timeout-minutes: 180
@@ -77,6 +77,9 @@ jobs:
       - name: Build Firefox upstream artifact
         working-directory: .upstream/firefox
         run: ./mach build
+      - name: Check built application
+        working-directory: .upstream/firefox
+        run: ./mach run --help
       - name: Report build metadata
         if: always()
         run: |
