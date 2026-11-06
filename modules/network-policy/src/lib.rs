@@ -12,7 +12,10 @@ impl NetworkPolicy {
         exceptions: impl IntoIterator<Item = String>,
     ) -> Self {
         Self {
-            denied: denied.into_iter().filter_map(|s| normalized_dns_host(&s)).collect(),
+            denied: denied
+                .into_iter()
+                .filter_map(|s| normalized_dns_host(&s))
+                .collect(),
             exceptions: exceptions
                 .into_iter()
                 .filter_map(|s| normalized_dns_host(&s))
