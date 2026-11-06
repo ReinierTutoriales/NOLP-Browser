@@ -31,5 +31,13 @@ Aplicar al actualizar Gecko/Firefox, GeckoView, Rust, Android, UI, librerías, c
 - Android releases: https://developer.android.com/about/versions
 - Dependencias: repositorios upstream, changelogs oficiales, advisories y SBOM del proyecto.
 
+## Revisión integral continua
+- En cada cambio inspeccionar también dependencias transitivas, lockfiles, toolchain, SDK, reglas de bloqueo, bases de datos, APIs obsoletas, scripts de build y GitHub Actions, según alcance.
+- Priorizar avisos críticos, versiones fuera de soporte y vulnerabilidades; después actualizar al último estable compatible y medir impactos.
+- Evaluar migraciones a APIs nativas modernas, eliminación de capas redundantes, modularidad, coste de mantenimiento y tamaño del binario.
+- Integrar la skill `skills/security-performance/SKILL.md` para análisis de amenazas, benchmarking, privacidad y pruebas de regresión.
+- Seguir la política de identidad de `AGENTS.md`: no atribuir autoría ni firmas personales a asistentes ni simular firmas del titular.
+- Automatizar detección de nuevas versiones cuando sea posible, pero exigir verificación de compatibilidad y pruebas antes de adoptar cambios en producción.
+
 ## Evidencia
 Actualizar `docs/UPSTREAM-STATUS.md` con la versión exacta, referencia upstream, fecha de consulta, estado de compilación, resultado y pendiente. Si no hay acceso a fuentes o CI, registrar **sin verificar** en vez de afirmar actualidad.
