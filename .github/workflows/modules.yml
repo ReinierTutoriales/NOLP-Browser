@@ -49,6 +49,10 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - name: Validate lockfile and workspace metadata
         run: cargo metadata --locked --offline --format-version 1 --no-deps > /dev/null
+      - name: Verify Cargo-generated lockfile matches repository
+        run: |
+          cargo generate-lockfile --offline
+          git diff --exit-code -- Cargo.lock
       - name: Compile all crates and test targets
         run: cargo check --workspace --all-targets --locked --offline
 
