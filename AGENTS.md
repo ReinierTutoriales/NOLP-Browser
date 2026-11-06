@@ -33,3 +33,13 @@ NOLP (Nexo Óptimo Local y Privado) es un navegador local-first, privacy-first y
 - `docs/LICENSING.md`: obligaciones MPL-2.0, terceros, marcas y distribución.
 
 Si existe conflicto, priorizar protección del usuario y compatibilidad de seguridad upstream; documentar el conflicto antes de decidir.
+
+## Política de actualidad tecnológica (obligatoria)
+- Consultar fuentes oficiales de Mozilla, Rust, Android y cada dependencia **en el momento de cada actualización**; no basarse en números de versión memorizados ni en afirmaciones sin fecha.
+- Adoptar la **última versión estable y mantenida compatible**, con parches de seguridad, como objetivo de producción. Nightly, beta, alpha y versiones preliminares solo en ramas o matrices experimentales; nunca asumir que «más nueva» equivale a «más segura».
+- Para Firefox/Gecko, seguir avisos de seguridad Mozilla (MFSA), notas de versión y documentación de compilación. Fijar commit/tag exacto, versión y fecha de comprobación; actualizar con cadencia regular y acelerar ante CVE relevantes.
+- Para GeckoView, Rust, toolchains, SDK y librerías, contrastar versión, compatibilidad, cambios incompatibles, mantenimiento, licencias y requisitos de plataforma antes de migrar.
+- No dejar componentes obsoletos por inercia, pero tampoco forzar una actualización que rompa seguridad, sandbox, compatibilidad o estabilidad: documentar el bloqueo, la alternativa y un plan de resolución.
+- Ejecutar pruebas de compilación, regresión, seguridad, rendimiento y privacidad tras cada actualización; medir antes de declarar mejoras.
+- Mantener un registro auditable de versión instalada, última estable disponible, fuente oficial, fecha de consulta, riesgos y decisión de actualización.
+- Los agentes deben aplicar esta política a todo módulo nuevo o modificado, no solo al motor web.
