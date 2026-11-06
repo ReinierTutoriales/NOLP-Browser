@@ -1,5 +1,7 @@
 """Release gate regression tests: fail closed, including stale successful runs."""
 import importlib.util
+import json
+import tempfile
 from pathlib import Path
 import unittest
 
@@ -14,6 +16,17 @@ def run(name, status="completed", conclusion="success", run_id=1):
 
 
 class ReleaseReadinessTests(unittest.TestCase):
+    def test_pr_uses_head_sha_not_synthetic_merge_sha(self):
+        with tempfile.NamedTemporaryFile(mode="w+", encoding="utf-8") as handle:
+            json.dump({"pull_request": {"head": {"sha": "pr-head-sha"}}}, handle)
+            handle.flush()
+            self.assertEqual(gate.target_sha("pull_request", "synthetic-merge-sha", handle.name), "pr-head-sha")
+
+    def test_pr_only_accepts_matching_pr_run(self):
+        self.assertTrue(gate.eligible_run({"head_sha": "abc", "event": "pull_request"}, "abc", "pull_request"))
+        self.assertFalse(gate.eligible_run({"head_sha": "abc", "event": "push"}, "abc", "pull_request"))
+        self.assertFalse(gate.eligible_run({"head_sha": "different", "event": "pull_request"}, "abc", "pull_request"))
+
     def test_all_six_successful(self):
         checks = {name: [run(name)] for name in gate.REQUIRED}
         self.assertEqual(gate.evaluate_runs(checks), [])
