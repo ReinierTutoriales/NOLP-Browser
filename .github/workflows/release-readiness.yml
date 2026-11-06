@@ -1,0 +1,19 @@
+name: Release readiness gate
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  verify:
+    name: Verify all mandatory checks on exact commit
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Fail closed on missing or failed checks
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 scripts/check-release-readiness.py
