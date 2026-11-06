@@ -17,6 +17,8 @@ assert "contracts" in ids and "core" in ids and "engine-gecko" in ids
 assert all(re.fullmatch(r"[a-z][a-z0-9-]*", i) for i in ids)
 for m in modules:
     assert m["status"] in {"planned", "scaffold", "implemented", "verified"}
+    assert isinstance(m.get("enabled"), bool), f"Missing explicit activation flag: {m['id']}"
+    assert not m["enabled"] or m["status"] == "verified", f"Unverified module activated: {m['id']}"
     assert re.fullmatch(r"\d+\.\d+\.\d+", m["public_api_version"])
     deps = m["dependencies"]
     assert len(deps) == len(set(deps)), f"Duplicate dependencies: {m['id']}"
