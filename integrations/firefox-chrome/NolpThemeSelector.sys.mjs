@@ -1,15 +1,16 @@
-/* NOLP theme selector backend: reuse Firefox's built-in theme add-ons.
- * Intended for privileged Firefox browser chrome only, not web content.
- * No custom theme engine, storage, observer or extension.
+/* NOLP theme selection uses Firefox's native theme add-on manager.
+ * Automatic mode activates the Firefox default theme, which follows the
+ * operating system's appearance without polling or a page-scoped listener.
  */
 export const NOLP_THEMES = Object.freeze({
+  auto: "default-theme@mozilla.org",
   light: "firefox-compact-light@mozilla.org",
   dark: "firefox-compact-dark@mozilla.org",
 });
 
 export async function setNolpTheme(mode, addonManager) {
   if (!Object.hasOwn(NOLP_THEMES, mode)) {
-    throw new RangeError("NOLP supports only light and dark");
+    throw new RangeError("NOLP supports auto, light and dark");
   }
   const addon = await addonManager.getAddonByID(NOLP_THEMES[mode]);
   if (!addon || addon.type !== "theme" || addon.appDisabled) {
@@ -22,10 +23,9 @@ export async function setNolpTheme(mode, addonManager) {
 }
 
 export async function getNolpTheme(addonManager) {
-  const dark = await addonManager.getAddonByID(NOLP_THEMES.dark);
-  if (dark?.isActive) return "dark";
-  const light = await addonManager.getAddonByID(NOLP_THEMES.light);
-  if (light?.isActive) return "light";
-  return null; // Existing system/extension theme: do not silently overwrite.
+  for (const [mode, id] of Object.entries(NOLP_THEMES)) {
+    const addon = await addonManager.getAddonByID(id);
+    if (addon?.isActive) return mode;
+  }
+  return null; // Preserve an existing non-NOLP theme until explicit selection.
 }
-
