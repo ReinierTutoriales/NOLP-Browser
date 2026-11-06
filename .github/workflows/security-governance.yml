@@ -1,17 +1,8 @@
 name: Security governance
 on:
   push:
-    paths:
-      - 'AGENTS.md'
-      - 'skills/**'
-      - 'tests/test_security_governance.py'
-      - '.github/workflows/**'
+    branches: [main]
   pull_request:
-    paths:
-      - 'AGENTS.md'
-      - 'skills/**'
-      - 'tests/test_security_governance.py'
-      - '.github/workflows/**'
   workflow_dispatch:
 
 permissions:
