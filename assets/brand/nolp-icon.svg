@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+<title id="title">NOLP — icono</title><desc id="desc">Monograma N de cinta violeta a cian rodeado por un arco abierto.</desc>
+<defs><linearGradient id="ribbon" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#BD4CFF"/><stop offset=".52" stop-color="#6748F5"/><stop offset="1" stop-color="#00D9F5"/></linearGradient><linearGradient id="orbit" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#B34CFF"/><stop offset="1" stop-color="#00D9F5"/></linearGradient></defs>
+<circle cx="256" cy="256" r="218" fill="none" stroke="url(#orbit)" stroke-width="11" stroke-linecap="round" stroke-dasharray="1120 250" transform="rotate(142 256 256)"/>
+<path d="M137 346V182c0-31 34-46 58-27l148 121V165c0-18 14-32 32-32v194c0 31-35 47-59 27L169 233v81c0 18-14 32-32 32Z" fill="url(#ribbon)"/>
+</svg>
