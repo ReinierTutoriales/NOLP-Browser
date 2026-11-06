@@ -13,7 +13,7 @@
 | Gobernanza | `AGENTS.md`, `docs/ENGINEERING.md` | Reglas para agentes y calidad | Automatizar y demostrar cumplimiento |
 | Arquitectura | `docs/ARCHITECTURE.md`, `docs/SECURITY-PRIVACY.md` | Diseño de módulos y amenazas | Implementaciones y pruebas |
 | Actualidad | `skills/upstream-currentness/SKILL.md`, `docs/UPSTREAM-STATUS.md` | Guía local y registro | Comprobación oficial de versiones y seguimiento periódico |
-| Motor desktop | `engine/upstream-manifest/firefox.toml` | URL upstream y commit candidato fijado | Validar que es release estable soportada; compilar y ejecutar |
+| Motor desktop | `engine/upstream-manifest/firefox.toml` | URL upstream y commit de release estable fijado | Validar que es release estable soportada; compilar y ejecutar |
 | Descarga | `scripts/bootstrap-firefox.sh` | Script que exige coincidencia con manifiesto | Probar ejecución real y gestionar errores de red/espacio |
 | Verificación | `scripts/check-foundation.py`, `scripts/smoke-firefox.sh` | Comprobaciones definidas | Ejecutarlas en CI y verificar logs |
 | CI | `.github/workflows/firefox-foundation.yml` | Workflow declarativo: validación y build manual optativo | Evidencia de CI verde, artefactos y smoke de arranque |
@@ -34,10 +34,10 @@
 `engine/upstream-manifest/firefox.toml` fija:
 
 - Origen: `https://github.com/mozilla-firefox/firefox`
-- Commit candidato: `d9bd6be9a67efb1c2667ef91a89856f35eb7cf5e`
+- Commit candidato: `6181e6b5f28a8fbae1d5c3ef6f6626b5a2180213`
 - GeckoView: sin versión.
 
-**No está verificado** que el commit corresponda al último Firefox estable, ni que la compilación funcione. Antes de producción: identificar release estable oficial, relacionarla con el tag/commit upstream, registrar fecha, advisories y cambios, actualizar manifiesto y repetir pruebas. No actualizar automáticamente a la punta de `main` o Nightly.
+**Verificado:** el commit corresponde al tag oficial de Firefox 159.0.1, la versión estable identificada al 2026-11-06. **Sin verificar:** que la compilación y el arranque funcionen. Antes de producción: identificar release estable oficial, relacionarla con el tag/commit upstream, registrar fecha, advisories y cambios, actualizar manifiesto y repetir pruebas. No actualizar automáticamente a la punta de `main` o Nightly.
 
 ## 4. Cómo reproducir lo disponible (Linux o entorno compatible)
 
@@ -73,8 +73,8 @@ Workflow: `.github/workflows/firefox-foundation.yml`.
 ### M0 — Asegurar procedencia y versión
 - [x] Manifiesto con revisión inmutable candidata.
 - [x] Bootstrap que exige coincidencia con manifiesto.
-- [ ] Comparar con última versión estable oficial de Mozilla y avisos de seguridad.
-- [ ] Fijar revisión de release validada, con fuente, fecha y estrategia de actualización.
+- [x] Comparar con versión estable oficial de Mozilla y avisos de seguridad (159.0.1; MFSA 2026-123; 2026-11-06).
+- [x] Fijar revisión de release con procedencia y fecha; **pendiente validar build y estrategia de actualizaciones**.
 
 **Aceptación:** versión/commit oficial identificados y registrados; revisión de seguridad completada.
 
@@ -160,4 +160,4 @@ Sin ejecución real, marcar **pendiente/no verificado**. No usar el estado del r
 - [Licencias](LICENSING.md) — MPL y terceros.
 - [Skill de actualidad](../skills/upstream-currentness/SKILL.md) — procedimiento de actualización.
 
-**Siguiente acción operativa:** verificar versión estable oficial, hacer que la CI valide y compile, y registrar un primer arranque. No iniciar el bloqueador o el vault como si el motor ya estuviera integrado.
+**Siguiente acción operativa:** ejecutar CI, corregir errores de compilación y registrar el primer arranque de Firefox upstream 159.0.1. No iniciar el bloqueador o el vault como si el motor ya estuviera integrado.
