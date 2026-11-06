@@ -46,7 +46,7 @@ Construir un navegador multiplataforma con una experiencia rápida y consistente
 | Plataforma | Integración con sistemas operativos, sandbox, permisos y actualizaciones. |
 | Pruebas | Seguridad, compatibilidad, regresiones y benchmarks de rendimiento. |
 
-**Motor previsto:** evaluar la familia tecnológica Firefox/Gecko y sus opciones reales de integración por plataforma antes de fijar una implementación. No se presupone que un mismo motor pueda distribuirse de forma idéntica en todos los sistemas.
+**Motor seleccionado:** Firefox/Gecko para escritorio y GeckoView para Android/TV. Actualmente solo existe el andamiaje de integración, con una revisión candidata fijada: no hay motor compilado ni ejecutable NOLP. iOS/iPadOS sigue sujeto a validación específica.
 
 ## Privacidad y seguridad
 
@@ -54,12 +54,16 @@ NOLP aspira a mantener los datos personales en el dispositivo, protegidos median
 
 El bloqueo de anuncios y rastreadores se diseñará como un componente independiente, con reglas mantenibles, actualización verificable de listas y controles comprensibles. **Ningún bloqueador puede garantizar la eliminación total de anuncios, rastreo o telemetría de terceros.**
 
+## Estado técnico y documentación de seguimiento
+
+La referencia central para saber exactamente **qué existe, qué falta y cómo comprobarlo** es [Estado real y hoja de ruta](docs/PROJECT-STATUS-AND-ROADMAP.md). Complementos: [inicio y bootstrap](docs/BOOTSTRAP.md), [versiones upstream](docs/UPSTREAM-STATUS.md), [arquitectura](docs/ARCHITECTURE.md) y [skill de actualización](skills/upstream-currentness/SKILL.md).
+
 ## Hoja de ruta
 
 - [ ] Definir plataformas objetivo y matriz de compatibilidad.
-- [ ] Seleccionar y justificar el motor web y su estrategia de actualización.
-- [ ] Establecer el modelo de amenazas y las políticas de privacidad.
-- [ ] Diseñar la arquitectura modular y sus contratos.
+- [x] Seleccionar Firefox/Gecko como base y documentar estrategia inicial de actualización (pendiente validar release estable y build).
+- [x] Documentar el modelo inicial de amenazas y las políticas de privacidad (implementación pendiente).
+- [x] Diseñar la arquitectura modular y sus contratos (implementación pendiente).
 - [ ] Implementar un prototipo mínimo de navegación.
 - [ ] Integrar almacenamiento local y bóveda de credenciales.
 - [ ] Desarrollar el motor de filtrado y las protecciones antirrastreo.
@@ -74,7 +78,7 @@ El símbolo vectorial oficial se encuentra en [`assets/brand/nolp-icon.svg`](ass
 
 ## Desarrollo y contribuciones
 
-El proyecto está en fase de definición. Aún no se publican instrucciones de compilación porque no existe una configuración de construcción verificada en este repositorio.
+El proyecto está en fase inicial de implementación. Existen scripts y un workflow de compilación experimental de Firefox upstream, **sin resultado satisfactorio verificado**. Véase [Bootstrap](docs/BOOTSTRAP.md); todavía no existe una compilación ni una aplicación NOLP distribuible.
 
 Las propuestas deben priorizar seguridad, compatibilidad, rendimiento demostrado y mantenimiento a largo plazo. Los cambios de arquitectura deberán acompañarse de justificación técnica y pruebas cuando corresponda.
 
