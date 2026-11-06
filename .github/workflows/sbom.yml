@@ -1,0 +1,45 @@
+name: Dependency inventory SBOM
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - 'modules/**'
+      - 'integration/**'
+      - 'engine/upstream-manifest/**'
+      - '.github/workflows/sbom.yml'
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: '41 10 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  sbom:
+    name: Generate and validate source inventory
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Generate CycloneDX-compatible source inventory (Syft)
+        uses: anchore/sbom-action@66cbf4bc1f1c0d2edc94016e65bc221b6bb0ad6c # v0.24.3
+        with:
+          path: .
+          format: cyclonedx-json
+          output-file: nolp-source-sbom.cdx.json
+          upload-artifact: true
+          upload-release-assets: false
+      - name: Verify inventory is nonempty and structured
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path("nolp-source-sbom.cdx.json")
+          data = json.loads(p.read_text())
+          assert data.get("bomFormat") == "CycloneDX", "Unexpected SBOM format"
+          assert data.get("components"), "Empty SBOM component list"
+          print(f"SBOM components: {len(data['components'])}")
+          PY
