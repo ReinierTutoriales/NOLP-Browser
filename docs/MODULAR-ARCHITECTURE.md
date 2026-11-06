@@ -89,3 +89,6 @@ Fuentes primarias consultadas:
 
 ### Próximo cambio ejecutable
 Validar primero el flujo Artifact Build con fuente compatible y pruebas de arranque. Antes de integrar el primer crate nativo, preparar un job de compilación completa independiente; evitar que la CI rápida declare cobertura nativa inexistente.
+
+## Contratos de UI y comunicación Rust
+Aplicar `docs/UI-CROSS-PLATFORM-ARCHITECTURE.md`. Dentro de un proceso Rust, preferir traits y llamadas tipadas; usar FFI (UniFFI cuando corresponda) en límites Kotlin/Swift; IPC solo entre procesos con límites y validación. Mantener propietario único por estado, snapshots más eventos incrementales, backpressure, cancelación y errores tipados. Evitar buses universales y dependencias de UI sobre internals Gecko. Ningún contrato está integrado todavía.
