@@ -80,7 +80,7 @@ Las propuestas deben priorizar seguridad, compatibilidad, rendimiento demostrado
 
 ## Licencia
 
-La licencia del proyecto está pendiente de confirmación. No se presupone una licencia de código abierto hasta que se publique el archivo correspondiente.
+El código propio de NOLP se distribuye bajo la **Mozilla Public License 2.0 (MPL-2.0)**. Consulta [LICENSE](LICENSE). Los componentes de Firefox/Gecko y las dependencias de terceros conservan sus respectivas licencias y avisos. La licencia del código no concede derechos sobre el nombre ni el logotipo NOLP.
 
 ---
 
