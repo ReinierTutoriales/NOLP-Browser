@@ -46,3 +46,10 @@ GitHub Actions security: https://docs.github.com/en/actions/security-for-github-
 
 ## Salida mínima de cada intervención
 Estado antes → cambios exactos → pruebas y evidencia → riesgos y limitaciones → siguiente acción concreta.
+
+## Procedimiento adicional: UI y comunicación entre módulos
+- Leer `docs/UI-CROSS-PLATFORM-ARCHITECTURE.md`, `docs/UI-DESIGN-SYSTEM.md` y `docs/MODULAR-ARCHITECTURE.md`.
+- Clasificar cada comunicación: llamada Rust local, FFI Kotlin/Swift, interfaz Gecko o IPC entre procesos. Elegir la alternativa más simple y segura según el límite real.
+- Diseñar contratos versionados, ownership de estado, eventos incrementales, colas acotadas, cancelación y errores tipados. No exponer secretos a UI.
+- Verificar threading, memoria, copias FFI, contención y backpressure. Medir latencia input→frame, GPU, CPU, RAM, vídeo y accesibilidad por plataforma.
+- Mantener Aero Light/Dark con tokens compartidos, renderer adaptado y fallback opaco. Registrar pruebas ejecutadas y pendientes.
