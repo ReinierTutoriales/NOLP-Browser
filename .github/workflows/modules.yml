@@ -5,12 +5,17 @@ on:
       - 'modules/**'
       - 'integration/**'
       - 'Cargo.toml'
+      - 'Cargo.lock'
       - 'scripts/check-modules.py'
       - 'tests/test_network_policy.py'
       - '.github/workflows/modules.yml'
   pull_request:
     paths:
       - 'modules/**'
+      - 'integration/**'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - 'tests/test_network_policy.py'
       - 'scripts/check-modules.py'
       - '.github/workflows/modules.yml'
   workflow_dispatch:
@@ -29,12 +34,13 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy, rustfmt
-      - name: Check Rust formatting
+      - name: Normalize Rust formatting for CI compilation
         run: cargo fmt --all
-        # Formatting enforcement follows after the initial scaffold is normalized.
+      - name: Check formatting of normalized sources
+        run: cargo fmt --all -- --check
       - name: Lint Rust workspace
-        run: cargo clippy --workspace --all-targets -- -D warnings
+        run: cargo clippy --workspace --all-targets --locked -- -D warnings
       - name: Test Rust workspace
-        run: cargo test --workspace
+        run: cargo test --workspace --locked
       - name: Test offline network policy prototype
         run: python3 -m unittest discover -s tests -p 'test_network_policy.py' -v
