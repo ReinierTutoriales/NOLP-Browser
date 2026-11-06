@@ -32,7 +32,8 @@ NOLP (Next · Óptima · Local · Privada) es un navegador local-first, privacy-
 - `docs/UI-DESIGN-SYSTEM.md`: diseño Aero contemporáneo, dos temas y criterios de accesibilidad/rendimiento.
 - `docs/ANTI-AI-FILTER.md`: filtro anti-IA activado por defecto, incluyendo asistentes y resúmenes dentro de páginas, con excepciones y pruebas.
 - `docs/SECURITY-PRIVACY.md`: modelo de amenazas, protección de datos y red.
-- `docs/ENGINEERING.md`: criterios de calidad, verificación y fases.
+- `docs/ENGINEERING.md`: guía técnica normativa de integración Gecko/Rust, rutas de compilación, pruebas y criterios de aceptación.
+- `docs/MODULAR-ARCHITECTURE.md`: contratos, límites de módulos y referencias técnicas oficiales.
 - `docs/LICENSING.md`: obligaciones MPL-2.0, terceros, marcas y distribución.
 - `docs/UPSTREAM-STATUS.md`: versiones y comprobaciones reales.
 - `skills/upstream-currentness/SKILL.md`: procedimiento obligatorio de actualización tecnológica.
@@ -72,3 +73,8 @@ Si existe conflicto, priorizar protección del usuario y compatibilidad de segur
 - Los módulos funcionales solo dependen de contratos públicos versionados, nunca de detalles internos de otros módulos; composición en el núcleo.
 - Cambios de contrato requieren pruebas de compatibilidad y migración. No declarar independencia real solo por carpetas o manifiestos.
 - Ejecutar `python3 scripts/check-modules.py` y pruebas específicas de los módulos afectados; ampliar verificaciones de imports y compilación cuando haya implementaciones.
+
+## Aplicación obligatoria de la guía técnica
+- Antes de implementar un módulo, aplicar la matriz de pruebas y el procedimiento por módulo de `docs/ENGINEERING.md`.
+- No utilizar Artifact Builds como evidencia de compilación nativa Rust/C++/WebIDL; ejecutar una compilación completa cuando corresponda.
+- Registrar evidencia de compatibilidad con APIs Mozilla oficiales, pruebas de contrato y efectos en módulos consumidores.
