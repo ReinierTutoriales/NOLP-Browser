@@ -1,5 +1,8 @@
 # Skill local — Seguridad, privacidad, rendimiento y arquitectura NOLP
 
+## Precedencia
+Aplicar obligatoriamente `skills/security-assurance/SKILL.md` como puerta de seguridad y `skills/latest-stable-gate/SKILL.md` como puerta de dependencias. Esta skill complementa ambas con ingeniería y medición; no permite saltar sus bloqueos.
+
 ## Alcance
 Obligatorio en cambios de Gecko, GeckoView, UI, bloqueo, red, vault, almacenamiento, actualizador, compilación, CI, filtros y dependencias. Esta skill es una instrucción del repositorio; no modifica habilidades globales de ningún asistente.
 
