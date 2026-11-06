@@ -188,3 +188,9 @@ Sin ejecución real, marcar **pendiente/no verificado**. No usar el estado del r
 - CI configurada para ejecutar tests Rust y Python, además de lint Rust; **resultados pendientes de verificación**. La CI formatea una copia temporal antes de analizar, sin publicar ese formato. Falta fijar Cargo.lock y aplicar el formateo al repositorio.
 - Antes de integrar Rust en Firefox: seguir https://firefox-source-docs.mozilla.org/build/buildsystem/rust.html, incluyendo Cargo de Gecko, `gkrust-shared`, vendoring y auditoría. No insertar el workspace externo en libxul sin validar build nativo completo.
 - Próximo paso: comprobar CI y corregir fallos, fijar lockfile, normalizar formato, ampliar contratos de entrada/validación y probar adaptador Gecko en build completo.
+
+## Correcciones de base Rust (2026-11-06)
+- Añadido `Cargo.lock` para el grafo local de 16 crates; CI usa `--locked` en Clippy y tests. Verificar su consistencia real ejecutando Cargo en CI.
+- `scripts/check-modules.py` ahora coteja manifiesto, archivos de crates, versiones, dependencias declaradas en Cargo, miembros del workspace e inventario del lockfile. No inspecciona imports Rust transitivos ni seguridad en ejecución.
+- La CI sigue normalizando el formato Rust **solo en el checkout temporal** antes de compilar; su comprobación posterior verifica esa copia, **no** el formato de los archivos versionados. Pendiente aplicar `cargo fmt --all` y publicar los cambios para activar una comprobación estricta directamente sobre Git.
+- No hay confirmación de ejecución satisfactoria de CI ni de integración Gecko. No declarar resueltos otros fallos sin logs.
