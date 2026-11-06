@@ -78,3 +78,8 @@ Si existe conflicto, priorizar protección del usuario y compatibilidad de segur
 - Antes de implementar un módulo, aplicar la matriz de pruebas y el procedimiento por módulo de `docs/ENGINEERING.md`.
 - No utilizar Artifact Builds como evidencia de compilación nativa Rust/C++/WebIDL; ejecutar una compilación completa cuando corresponda.
 - Registrar evidencia de compatibilidad con APIs Mozilla oficiales, pruebas de contrato y efectos en módulos consumidores.
+
+## Política de red obligatoria
+- Consultar `docs/NETWORK-ENGINEERING.md` antes de cambios en DNS, TLS, HTTP/3, ECH, prefetch, bloqueo o diagnósticos.
+- Mantener Necko/NSS/Neqo y protecciones upstream; no añadir un segundo stack de red sin evidencia.
+- Exigir pruebas de compatibilidad, privacidad, seguridad y rendimiento, con resultados verificables.
