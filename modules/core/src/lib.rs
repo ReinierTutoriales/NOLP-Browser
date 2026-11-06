@@ -1,5 +1,7 @@
 //! Composition root: owns adapters via contracts, not concrete crates.
-use nolp_contracts::{normalized_dns_host, Decision, Module, ModuleState, Policy, Request, Verdict};
+use nolp_contracts::{
+    normalized_dns_host, Decision, Module, ModuleState, Policy, Request, Verdict,
+};
 use std::collections::HashSet;
 
 /// Runtime admission of independently implemented modules.
@@ -47,7 +49,9 @@ pub struct PolicyChain {
 }
 impl PolicyChain {
     pub fn new() -> Self {
-        Self { policies: Vec::new() }
+        Self {
+            policies: Vec::new(),
+        }
     }
     pub fn add(&mut self, policy: impl Policy + 'static) {
         self.policies.push(Box::new(policy));
@@ -128,11 +132,12 @@ mod tests {
         let chain = PolicyChain::new();
         for host in ["", "https://example.com", "a..b", "127.0.0.1"] {
             assert_eq!(
-                chain.evaluate(&Request {
-                    host,
-                    private: false,
-                })
-                .decision,
+                chain
+                    .evaluate(&Request {
+                        host,
+                        private: false,
+                    })
+                    .decision,
                 Decision::Block
             );
         }
