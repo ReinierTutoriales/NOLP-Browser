@@ -1,0 +1,25 @@
+[workspace]
+resolver = "2"
+members = [
+  "modules/contracts",
+  "modules/core",
+  "modules/engine-gecko",
+  "modules/ui-aero",
+  "modules/privacy",
+  "modules/content-blocker",
+  "modules/anti-ai",
+  "modules/identity-local",
+  "modules/identity-firefox",
+  "modules/vault",
+  "modules/media",
+  "modules/updates",
+  "modules/platform-desktop",
+  "modules/platform-android",
+  "modules/network-policy",
+]
+
+[workspace.package]
+edition = "2021"
+license = "MPL-2.0"
+
+# Standalone NOLP prototyping workspace; NOT integrated with Gecko's Cargo workspace.
