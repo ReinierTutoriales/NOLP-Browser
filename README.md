@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/brand/nolp-wordmark.svg" alt="NOLP — Next · Óptima · Local · Privada" width="520" />
+<img src="assets/brand/nolp-icon.svg" alt="Logotipo NOLP: monograma N violeta, azul y cian con anillo abierto" width="220" height="220" />
 
 </div>
 
