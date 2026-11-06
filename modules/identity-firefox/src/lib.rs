@@ -10,7 +10,7 @@ impl Module for FirefoxAccount {
         "identity-firefox"
     }
     fn state(&self) -> ModuleState {
-        ModuleState::RequiresConsent
+        ModuleState::Scaffold
     }
 }
 #[cfg(test)]
