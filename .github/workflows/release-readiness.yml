@@ -13,6 +13,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Test release gate fail-closed behavior
+        run: python3 -m unittest discover -s tests -p 'test_release_readiness.py' -v
       - name: Fail closed on missing or failed checks
         env:
           GITHUB_TOKEN: ${{ github.token }}
