@@ -1,0 +1,26 @@
+name: Security governance
+on:
+  push:
+    paths:
+      - 'AGENTS.md'
+      - 'skills/**'
+      - 'tests/test_security_governance.py'
+      - '.github/workflows/**'
+  pull_request:
+    paths:
+      - 'AGENTS.md'
+      - 'skills/**'
+      - 'tests/test_security_governance.py'
+      - '.github/workflows/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  policy-gate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify mandatory security policies and workflow controls
+        run: python3 -m unittest discover -s tests -p 'test_security_governance.py' -v
