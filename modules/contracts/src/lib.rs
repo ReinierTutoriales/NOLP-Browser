@@ -39,7 +39,9 @@ pub fn normalized_dns_host(host: &str) -> Option<String> {
             || label.len() > 63
             || label.starts_with('-')
             || label.ends_with('-')
-            || !label.bytes().all(|b| b.is_ascii_alphanumeric() || b == b'-')
+            || !label
+                .bytes()
+                .all(|b| b.is_ascii_alphanumeric() || b == b'-')
         {
             return None;
         }
