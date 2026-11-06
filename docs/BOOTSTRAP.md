@@ -26,4 +26,4 @@ No anunciar una versión NOLP hasta que se haya compilado, ejecutado y probado e
 
 ## GitHub Actions
 
-El workflow `Firefox foundation` valida el manifiesto en cada cambio relevante. La compilación de Firefox es **manual y opcional** (`workflow_dispatch`, opción `build_firefox`), puede consumir recursos importantes y **no constituye una compilación NOLP**. No hay evidencia de una ejecución satisfactoria hasta consultar los logs del workflow.
+El workflow `Firefox foundation` valida el manifiesto en cada cambio relevante. La compilación de Firefox se intenta automáticamente en los pushes a `main` que afectan al motor, scripts o workflow; también puede ejecutarse manualmente (`workflow_dispatch`, opción `build_firefox`). Puede consumir recursos importantes y **no constituye una compilación NOLP**. La CI valida la revisión y la versión upstream, intenta construir en modo artifact y ejecutar `./mach run --version`; **esto no verifica navegación ni inicio gráfico completo**. Ante un fallo se adjuntan diagnósticos básicos de disco y memoria. No hay evidencia de una ejecución satisfactoria hasta consultar los logs del workflow.
