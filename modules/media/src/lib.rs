@@ -7,6 +7,6 @@ impl Module for MediaUnavailable {
         "media"
     }
     fn state(&self) -> ModuleState {
-        ModuleState::Unavailable
+        ModuleState::Scaffold
     }
 }
