@@ -16,7 +16,17 @@ if [[ "$EXPECTED" != "$ACTUAL" ]]; then
   echo "Upstream mismatch: expected $EXPECTED, found $ACTUAL" >&2
   exit 3
 fi
-echo "Verified Gecko source revision: $ACTUAL"
+VERSION="$(python3 - "$ROOT/engine/upstream-manifest/firefox.toml" <<'PY'
+import sys,tomllib
+with open(sys.argv[1],"rb") as f: print(tomllib.load(f)["firefox"]["version"])
+PY
+)"
+ACTUAL_VERSION="$(tr -d '\\r\\n' < "$TREE/browser/config/version.txt")"
+if [[ "$ACTUAL_VERSION" != "$VERSION" ]]; then
+  echo "Upstream version mismatch: expected $VERSION, found $ACTUAL_VERSION" >&2
+  exit 4
+fi
+echo "Verified Gecko source revision: $ACTUAL ($ACTUAL_VERSION)"
 if [[ "${NOLP_RUN_BUILD:-0}" == "1" ]]; then
   (cd "$TREE" && ./mach build)
 else
