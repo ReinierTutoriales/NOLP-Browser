@@ -1,42 +1,62 @@
 #!/usr/bin/env python3
-"""Apply or check a minimal NOLP stylesheet import in a pinned Firefox source tree.
+"""Install a minimal NOLP stylesheet into pinned Firefox Desktop chrome.
 
-No Gecko internals are replaced. Abort on unexpected upstream structure.
+Only changes the known chrome stylesheet and jar manifest. Re-runnable and
+fail-closed on unexpected upstream changes. Does not install a theme selector.
 """
 import argparse
 from pathlib import Path
-import sys
 
-IMPORT = '@import url("chrome://browser/skin/nolp-chrome.css");'\nJAR_ENTRY = '  skin/classic/browser/nolp-chrome.css                        (../shared/nolp-chrome.css)'\nJAR_PATH = Path('browser/themes/shared/jar.inc.mn')
+IMPORT = '@import url("chrome://browser/skin/nolp-chrome.css");'
+ANCHOR = '@import url("chrome://browser/skin/browser-colors.css");'
+JAR_ENTRY = '  skin/classic/browser/nolp-chrome.css                        (../shared/nolp-chrome.css)'
+JAR_ANCHOR = 'skin/classic/browser/browser-shared.css'
 TARGET = Path("browser/themes/shared/browser-shared.css")
+JAR_PATH = Path("browser/themes/shared/jar.inc.mn")
 SOURCE = Path(__file__).resolve().parents[1] / "integrations/firefox-chrome/nolp-chrome.css"
 
-def main():
-    p = argparse.ArgumentParser()
-    p.add_argument("--firefox-dir", required=True, type=Path)
-    p.add_argument("--check", action="store_true")
-    args = p.parse_args()
-    root = args.firefox_dir.resolve()
+
+def apply(root: Path, check: bool = False) -> None:
+    root = root.resolve()
     target = root / TARGET
-    if not (root / "mach").is_file() or not target.is_file():
-        p.error("Expected Firefox source tree with mach and browser-shared.css")
+    jar = root / JAR_PATH
+    dest = target.parent / "nolp-chrome.css"
+    if not (root / "mach").is_file() or not target.is_file() or not jar.is_file():
+        raise ValueError("Not a supported Firefox source tree")
     data = target.read_text(encoding="utf-8")
-    if not data.strip() or "browser" not in data.lower():
-        p.error("Unexpected Firefox chrome stylesheet; manual upstream review required")
-    dest = target.parent / "nolp-chrome.css"\n    jar = root / JAR_PATH\n    if not jar.is_file() or "skin/classic/browser/browser-shared.css" not in jar.read_text(encoding="utf-8"):\n        p.error("Firefox chrome packaging manifest changed; review required")\n    manifest = jar.read_text(encoding="utf-8")
-    if args.check:
-        if data.count(IMPORT) != 1 or manifest.count(JAR_ENTRY) != 1 or not dest.is_file() or dest.read_bytes() != SOURCE.read_bytes():
-            p.error("NOLP overlay missing or differs from source")
-        print("NOLP Firefox chrome overlay verified")
-        return
-    if manifest.count(JAR_ENTRY) > 1:\n        p.error("Duplicate NOLP chrome packaging entries")\n    if data.count(IMPORT) > 1:
-        p.error("Duplicate NOLP imports")
+    manifest = jar.read_text(encoding="utf-8")
+    if ANCHOR not in data or JAR_ANCHOR not in manifest:
+        raise ValueError("Firefox upstream chrome layout changed; review required")
+    if data.count(IMPORT) > 1 or manifest.count(JAR_ENTRY) > 1:
+        raise ValueError("Duplicate NOLP chrome registration")
     if dest.exists() and dest.read_bytes() != SOURCE.read_bytes():
-        p.error("Existing NOLP overlay differs; review before overwriting")
+        raise ValueError("Existing NOLP stylesheet differs; manual review required")
+    if check:
+        if data.count(IMPORT) != 1 or manifest.count(JAR_ENTRY) != 1 or not dest.is_file():
+            raise ValueError("NOLP chrome overlay is missing")
+        return
+    # Validate every input before modifying the upstream checkout.
     if IMPORT not in data:
-        target.write_text(IMPORT + "\n" + data, encoding="utf-8")
+        data = data.replace(ANCHOR, ANCHOR + "\n" + IMPORT, 1)
+    if JAR_ENTRY not in manifest:
+        manifest = manifest.rstrip("\n") + "\n" + JAR_ENTRY + "\n"
+    target.write_text(data, encoding="utf-8")
+    jar.write_text(manifest, encoding="utf-8")
     dest.write_bytes(SOURCE.read_bytes())
-    print("NOLP chrome overlay applied; Firefox build/runtime validation still required")
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--firefox-dir", type=Path, required=True)
+    parser.add_argument("--check", action="store_true")
+    args = parser.parse_args()
+    try:
+        apply(args.firefox_dir, check=args.check)
+    except (ValueError, OSError) as exc:
+        parser.error(str(exc))
+    print("NOLP Firefox chrome registration verified" if args.check else
+          "NOLP Firefox chrome registered; runtime validation pending")
+
 
 if __name__ == "__main__":
     main()
