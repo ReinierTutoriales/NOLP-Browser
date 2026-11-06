@@ -4,6 +4,15 @@
 - `assets/brand/nolp-icon.svg`: símbolo principal, cuadrado, escalable, sin fondo. Preferido para iconos, accesos y aplicaciones.
 - `assets/brand/nolp-wordmark.svg`: marca horizontal para documentación y cabeceras de fondo oscuro.
 
+## Significado oficial del nombre
+
+- **N — Nex / Nexo:** conexión.
+- **O — Óptima:** rendimiento y eficiencia.
+- **L — Local:** tecnología *local-first*.
+- **P — Privada:** *privacy-first*.
+
+Esta definición es la referencia oficial para el nombre NOLP en documentación, interfaz y publicaciones. No usar expansiones alternativas del acrónimo.
+
 ## Concepto
 Monograma «N» como cinta continua, que representa conexión y autonomía. Arco abierto como metáfora de navegación sin encierro. Diseño sin dependencia de fuentes externas ni imágenes remotas.
 
