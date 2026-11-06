@@ -1,5 +1,5 @@
 //! Composition root: owns adapters via contracts, not concrete crates.
-use nolp_contracts::{Decision, Module, ModuleState, Policy, Request, Verdict};
+use nolp_contracts::{normalized_dns_host, Decision, Module, ModuleState, Policy, Request, Verdict};
 use std::collections::HashSet;
 
 /// Runtime admission of independently implemented modules.
@@ -53,6 +53,12 @@ impl PolicyChain {
         self.policies.push(Box::new(policy));
     }
     pub fn evaluate(&self, request: &Request<'_>) -> Verdict {
+        if normalized_dns_host(request.host).is_none() {
+            return Verdict {
+                decision: Decision::Block,
+                reason: "invalid-dns-host",
+            };
+        }
         for policy in &self.policies {
             let verdict = policy.evaluate(request);
             if verdict.decision == Decision::Block {
@@ -115,6 +121,13 @@ mod tests {
                 decision: Decision::Block,
                 reason: "test",
             }
+        }
+    }
+    #[test]
+    fn invalid_host_fails_closed() {
+        let chain = PolicyChain::new();
+        for host in ["", "https://example.com", "a..b", "127.0.0.1"] {
+            assert_eq!(chain.evaluate(&Request { host, private: false }).decision, Decision::Block);
         }
     }
     #[test]
