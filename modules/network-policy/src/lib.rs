@@ -1,5 +1,5 @@
 //! Network policy Rust contract. Does not intercept Gecko traffic.
-use nolp_contracts::{Decision, Policy, Request, Verdict};
+use nolp_contracts::{normalized_dns_host, Decision, Policy, Request, Verdict};
 use std::collections::HashSet;
 
 pub struct NetworkPolicy {
@@ -12,17 +12,22 @@ impl NetworkPolicy {
         exceptions: impl IntoIterator<Item = String>,
     ) -> Self {
         Self {
-            denied: denied.into_iter().map(|s| s.to_ascii_lowercase()).collect(),
+            denied: denied.into_iter().filter_map(|s| normalized_dns_host(&s)).collect(),
             exceptions: exceptions
                 .into_iter()
-                .map(|s| s.to_ascii_lowercase())
+                .filter_map(|s| normalized_dns_host(&s))
                 .collect(),
         }
     }
 }
 impl Policy for NetworkPolicy {
     fn evaluate(&self, request: &Request<'_>) -> Verdict {
-        let host = request.host.to_ascii_lowercase();
+        let Some(host) = normalized_dns_host(request.host) else {
+            return Verdict {
+                decision: Decision::Block,
+                reason: "invalid-dns-host",
+            };
+        };
         if self.exceptions.contains(&host) {
             Verdict {
                 decision: Decision::Allow,
