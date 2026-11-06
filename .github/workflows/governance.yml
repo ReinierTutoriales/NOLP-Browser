@@ -1,0 +1,27 @@
+name: NOLP governance
+on:
+  push:
+    paths:
+      - 'AGENTS.md'
+      - 'skills/**'
+      - 'scripts/check-governance.py'
+      - '.github/workflows/governance.yml'
+  pull_request:
+    paths:
+      - 'AGENTS.md'
+      - 'skills/**'
+      - 'scripts/check-governance.py'
+      - '.github/workflows/governance.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  policy-check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify NOLP governance contracts
+        run: python3 scripts/check-governance.py
