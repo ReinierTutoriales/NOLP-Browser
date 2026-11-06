@@ -59,3 +59,12 @@ Solo dos opciones visibles: Claro y Oscuro. No añadir temas de colores, modo au
 5. Medir y optimizar en hardware representativo; mantener fallback seguro y sin efectos.
 
 **Criterio de aceptación:** dos temas coherentes, translucidez segura con fallback, navegación accesible, rendimiento sin regresiones relevantes y tests documentados.
+
+## Barra superior, anti-IA y cuentas (requisitos de producto)
+- Barra de menú y navegación **arriba**, compacta, rectangular y con material Aero Glass; accesible por teclado y con indicadores claros de seguridad.
+- **Filtro anti-IA habilitado por defecto**, con interruptor visible en Ajustes para desactivarlo y reactivarlo. Su alcance debe desglosarse en: integraciones de IA del navegador, endpoints conocidos y elementos identificables mediante reglas. Evitar promesas de detección total, bloqueo indiscriminado y roturas silenciosas; mostrar excepciones y diagnósticos locales.
+- **Cuentas locales por defecto:** perfil, marcadores, historial, preferencias y vault local protegido; sin cuenta en línea ni sincronización automática. No presentar el perfil local como una cuenta remota.
+- **Firefox Account opcional:** el usuario puede elegir explícitamente iniciar sesión y habilitar funciones oficiales de Mozilla, si la integración upstream es soportada y cumple requisitos de privacidad. No implementar credenciales propias para imitar Mozilla ni afirmar compatibilidad sin pruebas.
+- Cambiar de local a online requiere consentimiento granular por categoría de datos; **nunca subir contraseñas, historial, marcadores ni claves automáticamente**. Cambiar a local deshabilita sincronización y revoca sesiones/tokens según capacidades oficiales, sin borrar datos locales sin confirmación.
+- Ambos controles son reversibles, con estado persistido localmente, migraciones seguras y pruebas de privacidad/red. El filtro anti-IA no debe interferir con la autenticación oficial por defecto; documentar excepciones mínimas.
+- **Estado:** requisitos documentados, sin implementación funcional ni validación.
