@@ -1,5 +1,7 @@
 name: Release readiness gate
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -10,12 +12,27 @@ jobs:
   verify:
     name: Verify all mandatory checks on exact commit
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Test release gate fail-closed behavior
         run: python3 -m unittest discover -s tests -p 'test_release_readiness.py' -v
-      - name: Fail closed on missing or failed checks
+      - name: Wait for mandatory checks and verify exact commit
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        run: python3 scripts/check-release-readiness.py
+        run: |
+          python3 - <<'PY'
+          import os
+          import subprocess
+          import sys
+          import time
+          for attempt in range(45):
+              result = subprocess.run([sys.executable, "scripts/check-release-readiness.py"])
+              if result.returncode == 0:
+                  print("All release readiness checks passed.")
+                  sys.exit(0)
+              if attempt == 44:
+                  print("Release blocked: mandatory checks not all successful before timeout.", file=sys.stderr)
+                  sys.exit(1)
+              time.sleep(30)
+          PY
