@@ -1,7 +1,7 @@
 //! Composition smoke: typed module wiring without Gecko integration.
 use nolp_anti_ai::AntiAi;
 use nolp_content_blocker::HostBlocker;
-use nolp_contracts::{Decision, Engine, Request, Surface, Theme, Verdict};
+use nolp_contracts::{Engine, Request, Surface, Theme, Verdict};
 use nolp_core::PolicyChain;
 use nolp_engine_gecko::GeckoAdapter;
 use nolp_network_policy::NetworkPolicy;
@@ -19,6 +19,7 @@ pub fn selected_theme() -> Theme { AeroSurface::new(Theme::AeroDark).theme() }
 
 #[cfg(test)] mod tests {
     use super::*;
+    use nolp_contracts::Decision;
     #[test] fn policy_modules_compose() {
         for host in ["tracker.example", "ads.example", "ai.example"] {
             assert_eq!(evaluate_local(host).decision, Decision::Block);
