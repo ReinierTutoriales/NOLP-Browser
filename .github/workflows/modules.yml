@@ -1,0 +1,24 @@
+name: Module boundaries
+on:
+  push:
+    paths:
+      - 'modules/**'
+      - 'scripts/check-modules.py'
+      - '.github/workflows/modules.yml'
+  pull_request:
+    paths:
+      - 'modules/**'
+      - 'scripts/check-modules.py'
+      - '.github/workflows/modules.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  module-contracts:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate declared module boundaries
+        run: python3 scripts/check-modules.py
