@@ -7,7 +7,7 @@ import argparse
 from pathlib import Path
 import sys
 
-IMPORT = '@import url("nolp-chrome.css");'
+IMPORT = '@import url("chrome://browser/skin/nolp-chrome.css");'\nJAR_ENTRY = '  skin/classic/browser/nolp-chrome.css                        (../shared/nolp-chrome.css)'\nJAR_PATH = Path('browser/themes/shared/jar.inc.mn')
 TARGET = Path("browser/themes/shared/browser-shared.css")
 SOURCE = Path(__file__).resolve().parents[1] / "integrations/firefox-chrome/nolp-chrome.css"
 
@@ -23,13 +23,13 @@ def main():
     data = target.read_text(encoding="utf-8")
     if not data.strip() or "browser" not in data.lower():
         p.error("Unexpected Firefox chrome stylesheet; manual upstream review required")
-    dest = target.parent / "nolp-chrome.css"
+    dest = target.parent / "nolp-chrome.css"\n    jar = root / JAR_PATH\n    if not jar.is_file() or "skin/classic/browser/browser-shared.css" not in jar.read_text(encoding="utf-8"):\n        p.error("Firefox chrome packaging manifest changed; review required")\n    manifest = jar.read_text(encoding="utf-8")
     if args.check:
-        if data.count(IMPORT) != 1 or not dest.is_file() or dest.read_bytes() != SOURCE.read_bytes():
+        if data.count(IMPORT) != 1 or manifest.count(JAR_ENTRY) != 1 or not dest.is_file() or dest.read_bytes() != SOURCE.read_bytes():
             p.error("NOLP overlay missing or differs from source")
         print("NOLP Firefox chrome overlay verified")
         return
-    if data.count(IMPORT) > 1:
+    if manifest.count(JAR_ENTRY) > 1:\n        p.error("Duplicate NOLP chrome packaging entries")\n    if data.count(IMPORT) > 1:
         p.error("Duplicate NOLP imports")
     if dest.exists() and dest.read_bytes() != SOURCE.read_bytes():
         p.error("Existing NOLP overlay differs; review before overwriting")
