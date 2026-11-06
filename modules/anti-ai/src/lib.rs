@@ -19,7 +19,9 @@ impl AntiAi {
 }
 impl Policy for AntiAi {
     fn evaluate(&self, request: &Request<'_>) -> Verdict {
-        if self.enabled && normalized_dns_host(request.host).is_some_and(|host| self.hosts.contains(&host)) {
+        if self.enabled
+            && normalized_dns_host(request.host).is_some_and(|host| self.hosts.contains(&host))
+        {
             Verdict {
                 decision: Decision::Block,
                 reason: "explicit-ai-host-rule",
