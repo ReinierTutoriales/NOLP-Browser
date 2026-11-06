@@ -10,7 +10,7 @@ impl Module for Privacy {
         "privacy"
     }
     fn state(&self) -> ModuleState {
-        ModuleState::Unavailable
+        ModuleState::Scaffold
     }
 }
 #[cfg(test)]
