@@ -6,7 +6,7 @@
 
 ## Significado oficial del nombre
 
-- **N — Nex:** siguiente generación (*next-generation*).
+- **N — Nextt:** siguiente generación (*next-generation*).
 - **O — Óptima:** rendimiento y eficiencia.
 - **L — Local:** tecnología *local-first*.
 - **P — Privada:** *privacy-first*.
