@@ -77,9 +77,13 @@ jobs:
       - name: Build Firefox upstream artifact
         working-directory: .upstream/firefox
         run: ./mach build
-      - name: Check built application
+      - name: Smoke test built Firefox executable
         working-directory: .upstream/firefox
-        run: ./mach run --help
+        env:
+          MOZ_HEADLESS: '1'
+        run: |
+          ./mach run --version
+          echo 'Firefox process invoked; this is not yet a full browser navigation test.'
       - name: Report build metadata
         if: always()
         run: |
