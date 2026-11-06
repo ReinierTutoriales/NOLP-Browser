@@ -43,6 +43,12 @@ mod tests {
     use nolp_contracts::Decision;
 
     #[test]
+    fn invalid_input_is_blocked_before_policy_evaluation() {
+        for host in ["", "https://example.com", "a..b", "127.0.0.1"] {
+            assert_eq!(evaluate_local(host).decision, Decision::Block);
+        }
+    }
+    #[test]
     fn policy_modules_compose() {
         for host in ["tracker.example", "ads.example", "ai.example"] {
             assert_eq!(evaluate_local(host).decision, Decision::Block);
