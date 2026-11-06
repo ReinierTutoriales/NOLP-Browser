@@ -65,3 +65,7 @@
 ## Execution ledger
 
 - Plan authored 2026-11-06. Do not mark unchecked items as completed without observed results.
+- Implemented a Rust `ModuleRegistry` with duplicate and non-ready rejection plus unit tests in `modules/core/src/lib.rs`; test execution remains unverified.
+- Verified manifest inventory by GitHub source inspection: 15 scaffolds, all disabled. No Rust runtime manifest loader exists.
+- Execution blocker: local runner lacks Rust and external GitHub access; Vercel Sandbox cannot be created because the connected account has no Vercel projects. Do not mark Cargo or Gecko build steps complete.
+- Ruling: avoid speculative edits to Firefox build and branding until a compiler and CI diagnostics are available; these tasks remain open.
