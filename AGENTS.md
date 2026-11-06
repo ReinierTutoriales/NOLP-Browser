@@ -29,6 +29,7 @@ NOLP (Next · Óptima · Local · Privada) es un navegador local-first, privacy-
 ## Documentos normativos
 - `docs/PROJECT-STATUS-AND-ROADMAP.md`: inventario verificable, motor, estado y criterios de aceptación; actualizar con cada hito.
 - `docs/ARCHITECTURE.md`: límites, módulos, integración y plataformas.
+- `docs/UI-DESIGN-SYSTEM.md`: diseño Aero contemporáneo, dos temas y criterios de accesibilidad/rendimiento.
 - `docs/SECURITY-PRIVACY.md`: modelo de amenazas, protección de datos y red.
 - `docs/ENGINEERING.md`: criterios de calidad, verificación y fases.
 - `docs/LICENSING.md`: obligaciones MPL-2.0, terceros, marcas y distribución.
@@ -60,3 +61,7 @@ Si existe conflicto, priorizar protección del usuario y compatibilidad de segur
 - Preferir soluciones nativas, estables y soportadas; reducir capas, duplicaciones, dependencias transitivas y código obsoleto. No sacrificar compatibilidad ni seguridad por la novedad.
 - Cada optimización requiere hipótesis, línea base, métrica reproducible, comparación y rollback. La innovación debe resolver un problema real, no añadir complejidad sin evidencia.
 - Actualizar documentación, pines, lockfiles, SBOM y matriz de CI cuando cambien dependencias o contratos. Registrar qué se probó y qué no.
+
+## Identidad visual obligatoria
+- Seguir `docs/UI-DESIGN-SYSTEM.md`: únicamente Aero Light y Aero Dark, ambos translúcidos con fallback opaco seguro.
+- No introducir temas extra, skins heredadas ni efectos costosos sin benchmarks. La accesibilidad puede reducir transparencia y movimiento sin constituir otro tema.
