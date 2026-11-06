@@ -178,3 +178,13 @@ Sin ejecución real, marcar **pendiente/no verificado**. No usar el estado del r
 - **Comunicación:** Rust local con traits y llamadas tipadas; FFI donde corresponda; IPC únicamente en límites entre procesos; eventos incrementales con control de flujo.
 - **Estado real:** arquitectura documentada; sin contratos de UI compilados, integración Rust/Gecko, UI NOLP ejecutable ni benchmarks verificados.
 - **Próximo criterio de aceptación:** compilar Gecko upstream, crear contratos de estado con pruebas y validar un recorrido de navegación extremo a extremo.
+
+## Prototipo modular Rust publicado (2026-11-06)
+- Existe un workspace Cargo **independiente de Firefox**, con 15 crates de módulos y un crate de pruebas de composición (`integration`).
+- Los módulos declaran solo `nolp-contracts` como dependencia directa; `nolp-core` compone políticas mediante traits. El crate `integration` conecta en pruebas `network-policy`, `content-blocker`, `anti-ai`, `core`, `engine-gecko` y `ui-aero`.
+- `modules/manifest.json` registra todos los módulos como `scaffold` (API 0.1.0); esto **no significa** integración Gecko ni funcionalidades de navegador completas.
+- Implementación parcial: contratos tipados, políticas de host exacto, control anti-IA reversible en memoria, estado local de consentimiento y tema. Son prototipos sin persistencia ni tráfico real.
+- Adaptadores Gecko, escritorio, Android, vault, medios y actualizaciones exponen estados no disponibles; no hay integración con APIs Mozilla, FFI, IPC, UI renderizada ni sandbox propio.
+- CI configurada para ejecutar tests Rust y Python, además de lint Rust; **resultados pendientes de verificación**. La CI formatea una copia temporal antes de analizar, sin publicar ese formato. Falta fijar Cargo.lock y aplicar el formateo al repositorio.
+- Antes de integrar Rust en Firefox: seguir https://firefox-source-docs.mozilla.org/build/buildsystem/rust.html, incluyendo Cargo de Gecko, `gkrust-shared`, vendoring y auditoría. No insertar el workspace externo en libxul sin validar build nativo completo.
+- Próximo paso: comprobar CI y corregir fallos, fijar lockfile, normalizar formato, ampliar contratos de entrada/validación y probar adaptador Gecko en build completo.
