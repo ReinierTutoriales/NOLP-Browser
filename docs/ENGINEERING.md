@@ -86,3 +86,6 @@ Antes de modificar la red, seguir `docs/NETWORK-ENGINEERING.md`: Necko/NSS/Neqo 
 
 ## Guía de UI multiplataforma y comunicación
 Seguir `docs/UI-CROSS-PLATFORM-ARCHITECTURE.md` para UI nativa por plataforma, contratos Rust, FFI, IPC, eventos y pruebas. Medir latencia input→frame, memoria, CPU, GPU, threading y compatibilidad; no adoptar un renderer o bus universal sin evidencia. Aplicar las rutas de build Gecko descritas arriba.
+
+## Workspace Rust de prototipos
+El workspace raíz `Cargo.toml` contiene crates independientes de NOLP y `integration/` para probar su composición por contratos. No está enlazado con Gecko/libxul. Ejecutar `cargo test --workspace` y `cargo clippy --workspace --all-targets -- -D warnings`; la CI inicial también formatea la copia de trabajo. La integración de producción deberá seguir el procedimiento oficial de Mozilla para `gkrust-shared`, Cargo.lock y `mach vendor rust` (https://firefox-source-docs.mozilla.org/build/buildsystem/rust.html). Las bindings JS de Gecko mediante UniFFI tienen privilegios chrome y no están diseñadas para rutas de máxima frecuencia (https://firefox-source-docs.mozilla.org/rust-components/developing-rust-components/uniffi.html). No convertir estos prototipos en un segundo motor ni afirmar que están integrados.
