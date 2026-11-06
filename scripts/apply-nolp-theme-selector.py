@@ -13,7 +13,7 @@ BODY_ANCHOR = '<vbox id="mainPrefPane">'
 CONTROL = '''<html:div id="nolp-theme-preferences" role="group" aria-label="NOLP appearance">
           <html:label for="nolp-theme-select">NOLP theme</html:label>
           <html:select id="nolp-theme-select" aria-label="NOLP theme">
-            <html:option value="light">NOLP Light</html:option>
+            <html:option value="auto">Automático (sistema)</html:option>\n            <html:option value="light">NOLP Light</html:option>
             <html:option value="dark">NOLP Dark</html:option>
           </html:select>
         </html:div>'''
