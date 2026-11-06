@@ -1,0 +1,50 @@
+name: Brand icon assets
+on:
+  pull_request:
+    paths:
+      - 'assets/brand/**'
+      - 'scripts/build-brand-icons.py'
+      - '.github/workflows/brand-icons.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'assets/brand/**'
+      - 'scripts/build-brand-icons.py'
+      - '.github/workflows/brand-icons.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install image toolchain
+        run: python -m pip install 'Pillow==11.3.0'
+      - name: Generate icon assets
+        run: python scripts/build-brand-icons.py
+      - name: Validate output
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          root = Path("dist/nolp-icons")
+          for size in (16,24,32,48,64,128,256,512,1024,2048):
+              with Image.open(root / "png" / f"nolp-{size}.png") as im:
+                  assert im.size == (size,size)
+                  assert im.mode == "RGBA"
+                  assert im.getpixel((0,0))[3] == 0
+          with Image.open(root / "nolp.ico") as im:
+              assert im.format == "ICO"
+          with Image.open(root / "nolp.icns") as im:
+              assert im.format == "ICNS"
+          print("Brand icon formats validated")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nolp-cross-platform-icons
+          path: dist/nolp-icons/
+          if-no-files-found: error
