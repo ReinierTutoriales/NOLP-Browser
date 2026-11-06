@@ -111,6 +111,14 @@
         "contracts"
       ],
       "public_api_version": "0.0.0"
+    },
+    {
+      "id": "network-policy",
+      "status": "scaffold",
+      "dependencies": [
+        "contracts"
+      ],
+      "public_api_version": "0.1.0"
     }
   ]
 }
