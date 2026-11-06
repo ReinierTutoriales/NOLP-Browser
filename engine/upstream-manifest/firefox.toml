@@ -1,0 +1,10 @@
+# NOLP upstream source policy. This is a template, not a pinned build.
+[firefox]
+source = "https://github.com/mozilla-firefox/firefox"
+revision = "" # REQUIRED: pin a reviewed immutable commit before any build
+integration = "desktop"
+policy = "minimal-patches"
+
+[geckoview]
+source = "https://mozilla.github.io/geckoview/"
+version = "" # REQUIRED: select a tested release before Android integration
