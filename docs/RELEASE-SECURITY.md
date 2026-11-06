@@ -1,7 +1,7 @@
 # Release readiness y procedencia
 
 ## Estado
-Existe una comprobación manual `.github/workflows/release-readiness.yml` que ejecuta `scripts/check-release-readiness.py`. **No publica binarios, no crea releases ni configura protección de ramas.** La integración real con un futuro pipeline de publicación es un requisito pendiente.
+Existe una comprobación automática en cada push a `main` y manual en `.github/workflows/release-readiness.yml` que ejecuta `scripts/check-release-readiness.py`. Espera hasta 22,5 minutos a que los seis controles del mismo commit finalicen, y falla si no aprueban. **No publica binarios, no crea releases ni configura protección de ramas.** La integración real con un futuro pipeline de publicación es un requisito pendiente.
 
 ## Condiciones obligatorias
 Antes de publicar, el commit exacto debe tener resultados `success` de los workflows Security scanning, Security governance, Dependency inventory SBOM, Module boundaries, NOLP governance y Firefox foundation. La comprobación consulta la API de GitHub, filtra por SHA exacto y falla ante ausencia, errores o ejecución pendiente. Un resultado exitoso de otro commit no sirve.
@@ -14,5 +14,5 @@ El SBOM de código fuente tiene atestación de GitHub en `main`; no es una atest
 ## Requisitos pendientes
 1. Integrar este gate como dependencia estricta de un workflow de publicación que empaquete y ateste el **binario real**.
 2. Configurar reglas de protección de `main` y checks requeridos con permisos administrativos del repositorio; actualmente no se ha confirmado acceso a dicha configuración.
-3. Ejecutar y validar el gate contra los resultados reales de un commit, además de sus pruebas unitarias.
+3. Confirmar en GitHub Actions el resultado de la primera ejecución automática del gate y comprobar los registros de sus pruebas.
 4. Establecer reglas administrativas de protección y un pipeline de publicación que dependa del gate; no declarar protección completa antes de ello.
