@@ -14,7 +14,7 @@
 
 ## ¿Qué significa NOLP?
 
-- **N — Nex:** conexión.
+- **N — Nex:** siguiente generación (*next-generation*).
 - **O — Óptima:** rendimiento y eficiencia.
 - **L — Local:** tecnología *local-first*.
 - **P — Privada:** privacidad desde el diseño (*privacy-first*).
