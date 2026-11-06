@@ -30,6 +30,7 @@ NOLP (Next · Óptima · Local · Privada) es un navegador local-first, privacy-
 - `docs/PROJECT-STATUS-AND-ROADMAP.md`: inventario verificable, motor, estado y criterios de aceptación; actualizar con cada hito.
 - `docs/ARCHITECTURE.md`: límites, módulos, integración y plataformas.
 - `docs/UI-DESIGN-SYSTEM.md`: diseño Aero contemporáneo, dos temas y criterios de accesibilidad/rendimiento.
+- `docs/ANTI-AI-FILTER.md`: filtro anti-IA activado por defecto, incluyendo asistentes y resúmenes dentro de páginas, con excepciones y pruebas.
 - `docs/SECURITY-PRIVACY.md`: modelo de amenazas, protección de datos y red.
 - `docs/ENGINEERING.md`: criterios de calidad, verificación y fases.
 - `docs/LICENSING.md`: obligaciones MPL-2.0, terceros, marcas y distribución.
