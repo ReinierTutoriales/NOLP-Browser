@@ -8,7 +8,10 @@ pub struct HostBlocker {
 impl HostBlocker {
     pub fn new(hosts: impl IntoIterator<Item = String>) -> Self {
         Self {
-            hosts: hosts.into_iter().filter_map(|h| normalized_dns_host(&h)).collect(),
+            hosts: hosts
+                .into_iter()
+                .filter_map(|h| normalized_dns_host(&h))
+                .collect(),
         }
     }
 }
