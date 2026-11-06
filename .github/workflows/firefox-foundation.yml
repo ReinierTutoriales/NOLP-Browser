@@ -30,6 +30,7 @@ jobs:
       - name: Validate manifest and bootstrap script
         run: |
           bash -n scripts/bootstrap-firefox.sh
+          bash -n scripts/smoke-firefox.sh
           python3 - <<'PY'
           import pathlib, re, tomllib
           data=tomllib.loads(pathlib.Path("engine/upstream-manifest/firefox.toml").read_text())
@@ -83,7 +84,21 @@ jobs:
           MOZ_HEADLESS: '1'
         run: |
           ./mach run --version
-          echo 'Firefox process invoked; this is not yet a full browser navigation test.'
+          echo 'Version smoke passed; no web navigation verified.'
+      - name: Preserve failure diagnostics
+        if: failure()
+        run: |
+          mkdir -p diagnostics
+          df -h . > diagnostics/disk.txt
+          free -h > diagnostics/memory.txt
+          find .upstream/firefox -maxdepth 3 -name 'config.log' -o -name 'build.log' > diagnostics/log-locations.txt 2>/dev/null || true
+      - name: Upload diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: firefox-build-diagnostics
+          path: diagnostics/
+          if-no-files-found: ignore
       - name: Report build metadata
         if: always()
         run: |
