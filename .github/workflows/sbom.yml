@@ -2,13 +2,6 @@ name: Dependency inventory SBOM
 on:
   push:
     branches: [main]
-    paths:
-      - 'Cargo.toml'
-      - 'Cargo.lock'
-      - 'modules/**'
-      - 'integration/**'
-      - 'engine/upstream-manifest/**'
-      - '.github/workflows/sbom.yml'
   pull_request:
   workflow_dispatch:
   schedule:
