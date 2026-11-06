@@ -30,5 +30,6 @@ NOLP (Nexo Óptimo Local y Privado) es un navegador local-first, privacy-first y
 - `docs/ARCHITECTURE.md`: límites, módulos, integración y plataformas.
 - `docs/SECURITY-PRIVACY.md`: modelo de amenazas, protección de datos y red.
 - `docs/ENGINEERING.md`: criterios de calidad, verificación y fases.
+- `docs/LICENSING.md`: obligaciones MPL-2.0, terceros, marcas y distribución.
 
 Si existe conflicto, priorizar protección del usuario y compatibilidad de seguridad upstream; documentar el conflicto antes de decidir.
