@@ -28,3 +28,4 @@ export async function getNolpTheme(addonManager) {
   if (light?.isActive) return "light";
   return null; // Existing system/extension theme: do not silently overwrite.
 }
+
