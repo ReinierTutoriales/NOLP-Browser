@@ -27,7 +27,11 @@ pub struct Verdict {
 /// Internationalized hostnames must be converted to IDNA ASCII by the caller.
 pub fn normalized_dns_host(host: &str) -> Option<String> {
     let host = host.trim().trim_end_matches('.');
-    if host.is_empty() || host.len() > 253 || !host.is_ascii() || host.parse::<std::net::IpAddr>().is_ok() {
+    if host.is_empty()
+        || host.len() > 253
+        || !host.is_ascii()
+        || host.parse::<std::net::IpAddr>().is_ok()
+    {
         return None;
     }
     for label in host.split('.') {
@@ -78,10 +82,21 @@ mod tests {
     use super::*;
     #[test]
     fn invalid_dns_hosts_rejected() {
-        for host in ["", "https://example.com", "example.com/path", "a..b", "-bad.example", "127.0.0.1", "bücher.example"] {
+        for host in [
+            "",
+            "https://example.com",
+            "example.com/path",
+            "a..b",
+            "-bad.example",
+            "127.0.0.1",
+            "bücher.example",
+        ] {
             assert_eq!(normalized_dns_host(host), None);
         }
-        assert_eq!(normalized_dns_host("EXAMPLE.COM."), Some("example.com".to_string()));
+        assert_eq!(
+            normalized_dns_host("EXAMPLE.COM."),
+            Some("example.com".to_string())
+        );
     }
     #[test]
     fn contract_values() {
