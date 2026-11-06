@@ -80,3 +80,6 @@ La presencia de esta documentación no significa que el navegador, el bloqueador
 - [Rust — Cargo Workspaces](https://doc.rust-lang.org/stable/cargo/reference/workspaces.html)
 
 **Actualización:** revisar las páginas oficiales al implementar; las APIs y requisitos pueden cambiar. No se ha demostrado aún una compilación nativa completa ni aislamiento real de los módulos NOLP.
+
+## Guía de red
+Antes de modificar la red, seguir `docs/NETWORK-ENGINEERING.md`: Necko/NSS/Neqo upstream, contratos modulares, pruebas de seguridad y mediciones comparables. No presentar especificaciones como funcionalidades implementadas.
