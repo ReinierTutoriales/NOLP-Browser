@@ -19,7 +19,7 @@ impl Module for GeckoAdapter {
         "engine-gecko"
     }
     fn state(&self) -> ModuleState {
-        ModuleState::Unavailable
+        ModuleState::Scaffold
     }
 }
 #[cfg(test)]
