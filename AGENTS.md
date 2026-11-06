@@ -10,6 +10,11 @@ NOLP (Next · Óptima · Local · Privada) es un navegador local-first, privacy-
 - Objetivo: última versión estable disponible y soportada, verificada con fuente oficial y fecha. Si no es compatible, registrar excepción aprobada con plazo y pruebas; no declarar cumplimiento sin evidencia.
 - **Bloquear publicación** ante vulnerabilidades no mitigadas, excepciones vencidas o pruebas de compatibilidad fallidas. La automatización de propuestas no equivale a cumplimiento.
 
+## Puerta obligatoria de seguridad — Security Assurance Gate
+- Leer y aplicar `skills/security-assurance/SKILL.md` en **todo** cambio, PR, actualización, integración y release.
+- Prohibido aprobar releases con vulnerabilidades críticas sin mitigar, secretos filtrados, pérdida de sandbox/TLS, controles de procedencia fallidos o pruebas de seguridad fallidas.
+- La evidencia debe distinguir análisis estático, auditoría de dependencias y pruebas reales de Gecko. Una CI verde no demuestra por sí sola seguridad integral.
+
 ## Reglas obligatorias
 1. Seguridad primero: conservar sandbox, aislamiento de sitios, validación TLS y parches de Mozilla. No desactivarlos para mejorar benchmarks.
 2. Mínima divergencia upstream: preferir APIs soportadas, después integraciones nativas y solo al final parches de Gecko, con justificación y pruebas.
@@ -43,6 +48,7 @@ NOLP (Next · Óptima · Local · Privada) es un navegador local-first, privacy-
 - `docs/UPSTREAM-STATUS.md`: versiones y comprobaciones reales.
 - `skills/upstream-currentness/SKILL.md`: procedimiento obligatorio de actualización tecnológica.
 - `skills/latest-stable-gate/SKILL.md`: puerta de cumplimiento obligatorio para dependencias y releases.
+- `skills/security-assurance/SKILL.md`: puerta de seguridad obligatoria para cada cambio y release.
 
 Si existe conflicto, priorizar protección del usuario y compatibilidad de seguridad upstream; documentar el conflicto antes de decidir.
 
