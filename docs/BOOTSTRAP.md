@@ -3,7 +3,7 @@
 **Estado:** andamiaje de integración; aún no es un navegador ejecutable.
 
 ## Primera plataforma: Firefox Desktop
-Se mantiene Firefox upstream fuera del repositorio, fijado a un commit inmutable candidato (aún sin validación de compilación). El script `scripts/bootstrap-firefox.sh` descarga el código sin modificar el repositorio NOLP.
+Se mantiene Firefox upstream fuera del repositorio, fijado a un commit inmutable de Firefox 159.0.1 (tag oficial verificado; compilación aún no validada). El script `scripts/bootstrap-firefox.sh` descarga el código sin modificar el repositorio NOLP.
 
 Requisitos: Git, Bash, espacio suficiente, y dependencias de compilación específicas del SO conforme a la documentación vigente de Mozilla.
 
@@ -15,8 +15,8 @@ bash scripts/bootstrap-firefox.sh
 El script **no** compila Firefox ni configura automáticamente el producto NOLP. Antes de crear una distribución se debe verificar la revisión fijada, confirmar que el proceso de build upstream funciona y documentar licencias, firma, actualización y pruebas.
 
 ## Próximos hitos verificables
-1. Seleccionar y fijar revisión de Firefox y estrategia de parches.
-2. Compilar Firefox upstream en CI para una plataforma piloto.
+1. [Hecho] Seleccionar y fijar Firefox 159.0.1 estable; pendiente verificar compilación y estrategia de parches.
+2. [Pendiente] Compilar Firefox upstream en CI para una plataforma piloto.
 3. Añadir configuración propia de producto y perfil aislado sin eliminar protecciones.
 4. Crear un test de arranque y auditoría de conexiones automáticas.
 5. Añadir integración del bloqueador tras validar las APIs disponibles.
