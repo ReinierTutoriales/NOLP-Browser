@@ -11,3 +11,6 @@ target/
 .env
 .env.*
 !.env.example
+
+# Persistent local-only development profiles (may contain browsing data)
+.local/
