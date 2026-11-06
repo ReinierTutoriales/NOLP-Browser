@@ -1,6 +1,18 @@
-# NOLP UI — Aero contemporáneo
+# NOLP UI — Aero Glass + Acrylic contemporáneo
 
 **Estado:** especificación de diseño aprobada como objetivo; **no implementada**. Identidad: Next · Óptima · Local · Privada.
+
+## Material híbrido oficial: Aero Glass + Acrylic
+La identidad NOLP combina **Aero Glass** (transparencia real, continuidad visual y profundidad) con **Acrylic** (frosted blur, tinte y contraste para elementos flotantes). No copiar literalmente versiones antiguas de Windows.
+
+- **Barra de título, pestañas y navegación:** superficie Glass continua y ligera, con transparencia contextual; evitar múltiples capas de blur superpuestas.
+- **Menús, cuadros, paneles y overlays:** Acrylic más difuso y tintado para legibilidad; limitar área, frecuencia de recomposición y coste de GPU.
+- **Omnibox y controles interactivos:** superficies con contraste estable y delimitación visual clara, sin sacrificar legibilidad por transparencia.
+- **Contenido web:** renderizado independiente y sin filtros de cristal sobre las páginas.
+- **Composición:** usar APIs nativas soportadas por cada plataforma; no asumir que Windows DWM/Mica/Acrylic, macOS vibrancy y Linux compositors ofrecen exactamente las mismas capacidades. Mica puede ser una alternativa de respaldo, no un equivalente a Acrylic con blur.
+- **Fallback:** superficie opaca coherente con el tema si el sistema no soporta transparencia o si accesibilidad, ahorro energético o estabilidad lo requieren.
+- **Efectos adaptativos:** evitar blur de pantalla completa, capturas de fondo por fotograma, múltiples passes de desenfoque y sobrecostes de vídeo; perfilar en hardware representativo.
+- **Evidencia:** validar materiales y APIs con documentación oficial de la plataforma en el momento de implementarlos; no afirmar que están disponibles o integrados sin pruebas.
 
 ## Dos temas, sin variantes adicionales
 1. **Claro — Aero Light:** superficies de cristal translúcido claro, tinte blanco neutro, tipografía oscura, bordes finos y profundidad discreta.
