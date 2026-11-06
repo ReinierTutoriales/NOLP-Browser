@@ -6,7 +6,7 @@
 
 ## Significado oficial del nombre
 
-- **N — Nex / Nexo:** conexión.
+- **N — Nex:** conexión.
 - **O — Óptima:** rendimiento y eficiencia.
 - **L — Local:** tecnología *local-first*.
 - **P — Privada:** *privacy-first*.
