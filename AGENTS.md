@@ -83,3 +83,9 @@ Si existe conflicto, priorizar protección del usuario y compatibilidad de segur
 - Consultar `docs/NETWORK-ENGINEERING.md` antes de cambios en DNS, TLS, HTTP/3, ECH, prefetch, bloqueo o diagnósticos.
 - Mantener Necko/NSS/Neqo y protecciones upstream; no añadir un segundo stack de red sin evidencia.
 - Exigir pruebas de compatibilidad, privacidad, seguridad y rendimiento, con resultados verificables.
+
+## UI multiplataforma y contratos de comunicación
+- Seguir `docs/UI-CROSS-PLATFORM-ARCHITECTURE.md` en todo cambio de UI, Rust, FFI, eventos o IPC.
+- Compartir lógica y tokens, no imponer un renderer único. Preservar Firefox Chrome UI en desktop y evaluar Compose con GeckoView en Android/TV.
+- Preferir llamadas Rust tipadas locales, UniFFI cuando aplique y mecanismos Gecko soportados. IPC solo en límites reales entre procesos, con seguridad y pruebas.
+- Mantener estado con propietario único, eventos acotados y cancelables, sin secretos en UI. Exigir pruebas de consumidores y mediciones antes de afirmar optimización.
