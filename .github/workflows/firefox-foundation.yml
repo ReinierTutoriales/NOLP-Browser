@@ -1,0 +1,78 @@
+name: Firefox foundation
+on:
+  push:
+    paths:
+      - 'engine/upstream-manifest/firefox.toml'
+      - 'scripts/**'
+      - '.github/workflows/firefox-foundation.yml'
+  pull_request:
+    paths:
+      - 'engine/upstream-manifest/firefox.toml'
+      - 'scripts/**'
+      - '.github/workflows/firefox-foundation.yml'
+  workflow_dispatch:
+    inputs:
+      build_firefox:
+        description: 'Run resource-intensive Firefox artifact build'
+        type: boolean
+        required: true
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate manifest and bootstrap script
+        run: |
+          bash -n scripts/bootstrap-firefox.sh
+          python3 - <<'PY'
+          import pathlib, re, tomllib
+          data=tomllib.loads(pathlib.Path("engine/upstream-manifest/firefox.toml").read_text())
+          rev=data["firefox"]["revision"]
+          assert re.fullmatch(r"[0-9a-f]{40}",rev), "Firefox revision must be immutable SHA"
+          assert data["firefox"]["source"] == "https://github.com/mozilla-firefox/firefox"
+          print("Manifest and shell syntax validated:",rev)
+          PY
+
+  artifact-build:
+    if: github.event_name == 'workflow_dispatch' && inputs.build_firefox
+    needs: validate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check disk capacity
+        run: |
+          df -h .
+          free -h
+      - name: Install build prerequisites
+        run: sudo apt-get update && sudo apt-get install -y python3 python3-venv git make curl
+      - name: Fetch pinned upstream
+        run: |
+          REV=$(python3 -c 'import tomllib;print(tomllib.load(open("engine/upstream-manifest/firefox.toml","rb"))["firefox"]["revision"])')
+          FIREFOX_REVISION="$REV" bash scripts/bootstrap-firefox.sh
+      - name: Configure artifact build
+        run: |
+          cat > .upstream/firefox/mozconfig <<'EOF'
+          ac_add_options --enable-artifact-builds
+          ac_add_options --disable-debug
+          mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj-nolp
+          EOF
+      - name: Bootstrap build dependencies
+        working-directory: .upstream/firefox
+        run: ./mach bootstrap --application-choice browser_artifact_mode
+      - name: Build Firefox upstream artifact
+        working-directory: .upstream/firefox
+        run: ./mach build
+      - name: Report build metadata
+        if: always()
+        run: |
+          git -C .upstream/firefox rev-parse HEAD || true
+          echo "This is an upstream Firefox artifact build, not a branded NOLP release."
