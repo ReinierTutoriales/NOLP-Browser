@@ -69,3 +69,11 @@
 - Verified manifest inventory by GitHub source inspection: 15 scaffolds, all disabled. No Rust runtime manifest loader exists.
 - Execution blocker: local runner lacks Rust and external GitHub access; Vercel Sandbox cannot be created because the connected account has no Vercel projects. Do not mark Cargo or Gecko build steps complete.
 - Ruling: avoid speculative edits to Firefox build and branding until a compiler and CI diagnostics are available; these tasks remain open.
+
+## Verified CI acceptance — 2026-11-06
+
+- GitHub Actions run: https://github.com/ReinierTutoriales/NOLP-Browser/actions/runs/42259366883
+- Commit: `4041c56ca69a4d6996512936a45883fd37d24a0d`.
+- All six jobs **passed**: module manifest and lockfile, rustfmt, Rust compilation and metadata, strict Clippy, Rust unit/integration tests, and offline Python policy tests.
+- Actual Rust compilation was performed on GitHub Actions (Rust 1.99.1 on Ubuntu 24.04), not inferred from local inspection.
+- The upstream Firefox/Gecko build and navigation smoke test are still **not validated**; the scaffold remains intentionally non-executable as a browser.
