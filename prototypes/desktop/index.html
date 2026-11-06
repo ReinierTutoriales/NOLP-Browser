@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<title>NOLP · Prototipo de interfaz</title>
+<style>
+:root{font:14px system-ui,Segoe UI,sans-serif;--bg:#0d111b;--chrome:#19202bdc;--field:#0d1420;--text:#f3f6ff;--muted:#a7b4c8;--border:#495264;--accent:#a875ff;--focus:#71d7f8}
+html[data-theme=light]{--bg:#edf0f7;--chrome:#f8faffeb;--field:#fff;--text:#18202f;--muted:#505e73;--border:#b2bbca;--accent:#6637c7;--focus:#075e8e}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);min-height:100vh}button,input{font:inherit;color:inherit}button{cursor:pointer;border:1px solid transparent;background:transparent;border-radius:3px;min-width:36px;min-height:36px}button:hover{background:color-mix(in srgb,var(--text) 10%,transparent)}button:focus-visible,input:focus-visible{outline:2px solid var(--focus);outline-offset:2px}header{background:var(--chrome);border-bottom:1px solid var(--border)}.tabs,.toolbar{display:flex;align-items:center;gap:5px;padding:6px 10px}.tabs{border-bottom:1px solid var(--border);overflow-x:auto}.tab{border:1px solid var(--border);background:var(--field);min-width:150px;max-width:225px;display:flex;align-items:center;justify-content:space-between;padding:0 8px;white-space:nowrap}.tab[aria-selected=true]{border-bottom:2px solid var(--accent)}.tab span{overflow:hidden;text-overflow:ellipsis}.tab-close{min-width:28px;min-height:28px}.brand{width:28px;height:28px;object-fit:contain;margin-right:5px}.address{flex:1;min-width:80px;min-height:36px;background:var(--field);border:1px solid var(--border);border-radius:3px;padding:0 12px}.label{color:var(--muted)}main{max-width:850px;margin:12vh auto 0;padding:24px}h1{font-size:clamp(26px,5vw,42px);font-weight:600;letter-spacing:-.04em}p{line-height:1.6;color:var(--muted)}.mark{width:90px;height:90px;object-fit:contain}.notice{margin-top:24px;border-left:3px solid var(--accent);padding:12px 16px;background:var(--chrome)}.status{font-size:12px;padding:8px 14px;border-top:1px solid var(--border);color:var(--muted);position:fixed;bottom:0;width:100%;background:var(--chrome)}@media(max-width:550px){.tab{min-width:115px}.toolbar{gap:2px;padding:4px}.brand{display:none}main{margin-top:5vh}}@media(prefers-reduced-motion:no-preference){button{transition:background .12s}}@media(prefers-reduced-transparency:reduce){:root{--chrome:#19202b}html[data-theme=light]{--chrome:#f8faff}}
+</style>
+</head>
+<body>
+<header aria-label="Controles de navegación">
+<div class="tabs" role="tablist" aria-label="Pestañas"><img class="brand" src="../../assets/brand/nolp-official.png" alt="NOLP"><div id="tabs" style="display:flex;gap:5px"></div><button id="add" title="Nueva pestaña" aria-label="Nueva pestaña">＋</button></div>
+<div class="toolbar"><button id="back" title="Atrás" aria-label="Atrás" disabled>←</button><button id="forward" title="Adelante" aria-label="Adelante" disabled>→</button><button id="reload" title="Recargar" aria-label="Recargar" disabled>↻</button><input id="address" class="address" aria-label="Dirección o búsqueda" placeholder="Dirección o búsqueda · integración Gecko pendiente"><button id="theme" title="Cambiar tema" aria-label="Cambiar tema">◐</button><button id="menu" title="Información" aria-label="Información">⋮</button></div>
+</header>
+<main><img class="mark" src="../../assets/brand/nolp-official.png" alt="Logotipo oficial NOLP"><h1>NOLP</h1><p>Next · Óptima · Local · Privada</p><div class="notice" role="status" id="notice">Vista preliminar de la interfaz Aero. El motor Gecko todavía no está conectado. No se cargan sitios web.</div></main>
+<div class="status">Prototipo UI · Sin conexión con Gecko · Sin telemetría propia</div>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+let nextId=1, active=0, tabs=[];
+function render(){const bar=$("tabs");bar.replaceChildren();for(const tab of tabs){const wrap=document.createElement("div");wrap.className="tab";wrap.setAttribute("role","tab");wrap.setAttribute("aria-selected",String(tab.id===active));wrap.tabIndex=tab.id===active?0:-1;const title=document.createElement("span");title.textContent=tab.title;const close=document.createElement("button");close.className="tab-close";close.textContent="×";close.setAttribute("aria-label","Cerrar "+tab.title);close.onclick=e=>{e.stopPropagation();tabs=tabs.filter(t=>t.id!==tab.id);if(!tabs.length)add();else{if(active===tab.id)active=tabs[0].id;render()}};wrap.onclick=()=>{active=tab.id;render()};wrap.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();active=tab.id;render()}};wrap.append(title,close);bar.append(wrap)}$("address").value=tabs.find(t=>t.id===active)?.address||""}
+function add(){const id=nextId++;tabs.push({id,title:"Nueva pestaña",address:""});active=id;render()}
+$("add").onclick=add;
+$("theme").onclick=()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme==="dark"?"light":"dark"};
+$("menu").onclick=()=>{$("notice").textContent="NOLP UI Aero: vista previa sin motor. Los controles de historial y recarga se habilitarán cuando Gecko esté integrado."};
+$("address").addEventListener("keydown",e=>{if(e.key!=="Enter")return;const value=e.target.value.trim();if(!value)return;const current=tabs.find(t=>t.id===active);current.address=value;current.title=value.length>26?value.slice(0,26)+"…":value;render();$("notice").textContent="Dirección registrada en esta pestaña: "+value+". Navegación no disponible: Gecko aún no está integrado.";});
+add();
+</script>
+</body></html>
