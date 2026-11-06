@@ -1,26 +1,20 @@
-/* NOLP native Firefox chrome: two themes, no backdrop filters or web-content styling. */
-@media (-moz-bool-pref: "nolp.theme.enabled") {
-  :root[brighttext] {
-    --nolp-chrome-bg: #181b23;
-    --nolp-chrome-fg: #f4f5fa;
-    --nolp-chrome-edge: #454b60;
-    --nolp-accent: #a48aff;
+/* NOLP Chrome UI theme: reuse Firefox's native light/dark color scheme.
+ * No web-content selectors, backdrop filters or additional UI renderer.
+ * Opt-in preference: nolp.theme.enabled (disabled by default until validated).
+ */
+@media -moz-pref("nolp.theme.enabled") {
+  @media not (forced-colors) {
+    :root {
+      --nolp-chrome-bg: light-dark(#f1f3f8, #181b23);
+      --nolp-chrome-fg: light-dark(#202431, #f4f5fa);
+      --nolp-chrome-edge: light-dark(#b8becd, #454b60);
+      --nolp-accent: light-dark(#6742bb, #a48aff);
+      --toolbar-bgcolor: var(--nolp-chrome-bg);
+      --toolbar-color: var(--nolp-chrome-fg);
+      --lwt-accent-color: var(--nolp-chrome-bg);
+      --lwt-text-color: var(--nolp-chrome-fg);
+      --toolbar-field-border-color: var(--nolp-chrome-edge);
+      --focus-outline-color: var(--nolp-accent);
+    }
   }
-  :root:not([brighttext]) {
-    --nolp-chrome-bg: #f1f3f8;
-    --nolp-chrome-fg: #202431;
-    --nolp-chrome-edge: #b8becd;
-    --nolp-accent: #6742bb;
-  }
-  :root {
-    --toolbar-bgcolor: var(--nolp-chrome-bg) !important;
-    --toolbar-color: var(--nolp-chrome-fg) !important;
-    --lwt-accent-color: var(--nolp-chrome-bg) !important;
-    --lwt-text-color: var(--nolp-chrome-fg) !important;
-    --toolbar-field-border-color: var(--nolp-chrome-edge) !important;
-    --focus-outline-color: var(--nolp-accent) !important;
-  }
-}
-@media (forced-colors: active) {
-  :root { --toolbar-bgcolor: Canvas !important; --toolbar-color: CanvasText !important; }
 }
