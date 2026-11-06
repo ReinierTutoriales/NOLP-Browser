@@ -39,7 +39,12 @@ def apply(root: Path, check: bool = False) -> None:
     if IMPORT not in data:
         data = data.replace(ANCHOR, ANCHOR + "\n" + IMPORT, 1)
     if JAR_ENTRY not in manifest:
-        manifest = manifest.rstrip("\n") + "\n" + JAR_ENTRY + "\n"
+        lines = manifest.splitlines(keepends=True)
+        anchor_indices = [i for i, line in enumerate(lines) if JAR_ANCHOR in line]
+        if len(anchor_indices) != 1:
+            raise ValueError("Ambiguous Firefox chrome packaging anchor")
+        lines.insert(anchor_indices[0] + 1, JAR_ENTRY + "\n")
+        manifest = "".join(lines)
     target.write_text(data, encoding="utf-8")
     jar.write_text(manifest, encoding="utf-8")
     dest.write_bytes(SOURCE.read_bytes())
