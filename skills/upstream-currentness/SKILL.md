@@ -3,6 +3,9 @@
 ## Objetivo
 Mantener el navegador y todos sus módulos en versiones **estables, soportadas y seguras** lo más recientes posible, sin degradar seguridad, compatibilidad, rendimiento ni privacidad. Este archivo es una guía para agentes que trabajen en el repositorio; no instala ni modifica skills globales de ChatGPT.
 
+## Precedencia normativa
+La puerta `skills/latest-stable-gate/SKILL.md` es obligatoria para cada cambio y release; este procedimiento aporta los pasos de investigación y verificación. Cualquier excepción requiere evidencia, vencimiento y aprobación; no equivale a cumplimiento automático.
+
 ## Activación
 Aplicar al actualizar Gecko/Firefox, GeckoView, Rust, Android, UI, librerías, compiladores, filtros, mecanismos criptográficos, formatos de datos, CI y herramientas.
 
