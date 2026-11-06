@@ -161,3 +161,12 @@ Sin ejecución real, marcar **pendiente/no verificado**. No usar el estado del r
 - [Skill de actualidad](../skills/upstream-currentness/SKILL.md) — procedimiento de actualización.
 
 **Siguiente acción operativa:** ejecutar CI, corregir errores de compilación y registrar el primer arranque de Firefox upstream 159.0.1. No iniciar el bloqueador o el vault como si el motor ya estuviera integrado.
+
+## Red: estado y secuencia de ejecución (2026-11-06)
+
+- Guía normativa publicada: `docs/NETWORK-ENGINEERING.md`.
+- Arquitectura elegida: Gecko Necko/NSS/Neqo upstream, con políticas locales y adaptadores mínimos.
+- Los submódulos `network-policy`, `network-privacy`, `network-filter`, `network-diagnostics` y `network-tests` son objetivos de arquitectura, no funciones operativas.
+- No hay todavía evidencias de compilación del motor, tráfico DNS, compatibilidad HTTP/3 ni benchmarks de red.
+- Orden de trabajo: (1) verificar Gecko; (2) contratos de políticas; (3) adaptador; (4) integración de filtros; (5) pruebas de fugas, compatibilidad y rendimiento.
+- Criterio para declarar implementado un módulo: código ejecutable, tests y evidencia de integración, no solo inventario.
