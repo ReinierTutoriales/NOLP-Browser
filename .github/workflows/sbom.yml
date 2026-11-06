@@ -22,6 +22,10 @@ jobs:
     name: Generate and validate source inventory
     runs-on: ubuntu-24.04
     timeout-minutes: 20
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Generate CycloneDX-compatible source inventory (Syft)
@@ -43,3 +47,8 @@ jobs:
           assert data.get("components"), "Empty SBOM component list"
           print(f"SBOM components: {len(data['components'])}")
           PY
+      - name: Attest SBOM provenance on main
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: nolp-source-sbom.cdx.json
