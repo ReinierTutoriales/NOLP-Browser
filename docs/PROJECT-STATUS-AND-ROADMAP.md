@@ -194,3 +194,9 @@ Sin ejecución real, marcar **pendiente/no verificado**. No usar el estado del r
 - `scripts/check-modules.py` ahora coteja manifiesto, archivos de crates, versiones, dependencias declaradas en Cargo, miembros del workspace e inventario del lockfile. No inspecciona imports Rust transitivos ni seguridad en ejecución.
 - La CI sigue normalizando el formato Rust **solo en el checkout temporal** antes de compilar; su comprobación posterior verifica esa copia, **no** el formato de los archivos versionados. Pendiente aplicar `cargo fmt --all` y publicar los cambios para activar una comprobación estricta directamente sobre Git.
 - No hay confirmación de ejecución satisfactoria de CI ni de integración Gecko. No declarar resueltos otros fallos sin logs.
+
+## Corrección de formato y veracidad de estado (2026-11-06)
+- Se normalizó manualmente el código Rust de los 15 módulos y `integration/` para habilitar `cargo fmt --all -- --check` directamente sobre el código publicado. La comprobación puede detectar diferencias restantes: no se ejecutó rustfmt localmente.
+- La CI ya **no** modifica archivos antes de comprobar formato. Usa `cargo clippy --workspace --all-targets --locked -- -D warnings` y `cargo test --workspace --locked`.
+- Se corrigieron los estados falsamente `Ready` de `privacy` e `identity-local`: siguen sin implementación persistente ni integración real y devuelven `Unavailable`.
+- El lockfile fue escrito según el grafo de dependencias locales y está pendiente de validación por Cargo; no se ha ejecutado una compilación ni se han recuperado logs de GitHub Actions. El resultado real de CI sigue **sin verificar**.
