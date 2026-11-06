@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       build_firefox:
-        description: 'Run resource-intensive Firefox artifact build'
+        description: 'Run resource-intensive Firefox source build'
         type: boolean
         required: true
         default: false
@@ -71,17 +71,16 @@ jobs:
         run: |
           python3 scripts/apply-nolp-theme-selector.py --firefox-dir .upstream/firefox
           python3 scripts/apply-nolp-theme-selector.py --firefox-dir .upstream/firefox --check
-      - name: Configure artifact build
+      - name: Configure Firefox source build
         run: |
           cat > .upstream/firefox/mozconfig <<'EOF'
-          ac_add_options --enable-artifact-builds
           ac_add_options --disable-debug
           mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj-nolp
           EOF
       - name: Bootstrap build dependencies
         working-directory: .upstream/firefox
-        run: ./mach bootstrap --application-choice browser_artifact_mode
-      - name: Build Firefox upstream artifact
+        run: ./mach bootstrap --application-choice browser --no-interactive
+      - name: Build patched Firefox from source
         working-directory: .upstream/firefox
         run: ./mach build
       - name: Smoke test built Firefox executable
@@ -112,4 +111,4 @@ jobs:
         if: always()
         run: |
           git -C .upstream/firefox rev-parse HEAD || true
-          echo "This is an upstream Firefox artifact build, not a branded NOLP release."
+          echo "This is a patched Firefox source build for validation, not a signed NOLP release."
