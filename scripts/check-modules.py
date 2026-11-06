@@ -40,5 +40,16 @@ workspace = tomllib.loads((ROOT / "Cargo.toml").read_text(encoding="utf-8"))
 assert set(workspace["workspace"]["members"]) == {"integration"} | {"modules/" + i for i in ids}, "Workspace members differ from module manifest"
 lock = tomllib.loads((ROOT / "Cargo.lock").read_text(encoding="utf-8"))
 assert lock["version"] == 4, "Expected Cargo.lock format 4"
-assert {p["name"] for p in lock["package"]} == {"nolp-integration"} | {"nolp-" + i for i in ids}, "Lockfile package set mismatch"
+packages = {p["name"]: p for p in lock["package"]}
+assert len(packages) == len(lock["package"]), "Duplicate package entries in lockfile"
+assert set(packages) == {"nolp-integration"} | {"nolp-" + i for i in ids}, "Lockfile package set mismatch"
+for m in modules:
+    package = packages["nolp-" + m["id"]]
+    assert package["version"] == m["public_api_version"], f"Lockfile version mismatch: {m['id']}"
+    assert set(package.get("dependencies", [])) == {"nolp-" + dep for dep in m["dependencies"]}, f"Lockfile dependencies mismatch: {m['id']}"
+integration = tomllib.loads((ROOT / "integration" / "Cargo.toml").read_text(encoding="utf-8"))
+integration_deps = integration.get("dependencies", {})
+assert set(packages["nolp-integration"].get("dependencies", [])) == set(integration_deps), "Integration lockfile dependencies mismatch"
+for name, dep in integration_deps.items():
+    assert name in packages and dep.get("path") == "../modules/" + name.removeprefix("nolp-"), f"Invalid integration dependency: {name}"
 print(f"Validated {len(modules)} Rust crates, declared dependencies, workspace and lockfile inventory")
