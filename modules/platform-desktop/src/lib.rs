@@ -7,6 +7,6 @@ impl Module for DesktopUnavailable {
         "platform-desktop"
     }
     fn state(&self) -> ModuleState {
-        ModuleState::Unavailable
+        ModuleState::Scaffold
     }
 }
