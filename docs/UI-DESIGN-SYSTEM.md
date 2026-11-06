@@ -3,7 +3,7 @@
 **Estado:** especificación de diseño aprobada como objetivo; **no implementada**. Identidad: Next · Óptima · Local · Privada.
 
 ## Material híbrido oficial: Aero Glass + Acrylic
-La identidad NOLP combina **Aero Glass** (transparencia real, continuidad visual y profundidad) con **Acrylic** (frosted blur, tinte y contraste para elementos flotantes). No copiar literalmente versiones antiguas de Windows.
+La identidad NOLP prioriza **Aero Glass** (transparencia real, continuidad visual y profundidad) y utiliza **Acrylic** solo como complemento funcional en menús y paneles. Dirección estética orientativa: 80 % Glass / 20 % Acrylic, no un porcentaje medible de píxeles. Modernizar el material, sin reproducir literalmente versiones antiguas de Windows.
 
 - **Barra de título, pestañas y navegación:** superficie Glass continua y ligera, con transparencia contextual; evitar múltiples capas de blur superpuestas.
 - **Menús, cuadros, paneles y overlays:** Acrylic más difuso y tintado para legibilidad; limitar área, frecuencia de recomposición y coste de GPU.
@@ -19,6 +19,13 @@ La identidad NOLP combina **Aero Glass** (transparencia real, continuidad visual
 2. **Oscuro — Aero Dark:** cristal translúcido ahumado, tinte negro/gris carbón, tipografía clara, contraste elevado y profundidad discreta.
 
 Solo dos opciones visibles: Claro y Oscuro. No añadir temas de colores, modo automático independiente ni skins heredadas. Mantener un acento visual coherente con la identidad NOLP y no saturar la interfaz.
+
+## Geometría — Aero de bordes definidos
+- Preferir geometría **rectangular, casi cuadrada**: radio visual orientativo de **2–4 px** en marcos y paneles; evitar esquinas grandes, píldoras y tarjetas redondeadas.
+- Pestañas y barra de direcciones compactas, rectangulares y claramente delimitadas; ajustar radio según accesibilidad y convenciones del sistema cuando sea imprescindible.
+- Separadores finos, bordes de 1 px donde ayuden a delimitar superficies, sombras mínimas y profundidad aportada por el propio cristal.
+- Evitar estéticas Fluent Design, Liquid Glass, neumorfismo, tarjetas sobredimensionadas y decoraciones innecesarias.
+- Material principal: vidrio Aero transparente; Acrylic solo en superficies flotantes que requieran mayor difusión y contraste.
 
 ## Principios de composición
 - Interfaz limpia, compacta y reconocible: barra de pestañas, navegación, omnibox, controles de privacidad, descargas y menús; sin tarjetas decorativas innecesarias.
