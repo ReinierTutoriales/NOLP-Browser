@@ -83,3 +83,6 @@ La presencia de esta documentación no significa que el navegador, el bloqueador
 
 ## Guía de red
 Antes de modificar la red, seguir `docs/NETWORK-ENGINEERING.md`: Necko/NSS/Neqo upstream, contratos modulares, pruebas de seguridad y mediciones comparables. No presentar especificaciones como funcionalidades implementadas.
+
+## Guía de UI multiplataforma y comunicación
+Seguir `docs/UI-CROSS-PLATFORM-ARCHITECTURE.md` para UI nativa por plataforma, contratos Rust, FFI, IPC, eventos y pruebas. Medir latencia input→frame, memoria, CPU, GPU, threading y compatibilidad; no adoptar un renderer o bus universal sin evidencia. Aplicar las rutas de build Gecko descritas arriba.
