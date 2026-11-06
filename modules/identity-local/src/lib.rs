@@ -16,7 +16,7 @@ impl Module for LocalProfile {
         "identity-local"
     }
     fn state(&self) -> ModuleState {
-        ModuleState::Unavailable
+        ModuleState::Scaffold
     }
 }
 #[cfg(test)]
