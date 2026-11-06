@@ -16,7 +16,9 @@ pub enum RegistrationError {
 
 impl ModuleRegistry {
     pub fn new() -> Self {
-        Self { ids: HashSet::new() }
+        Self {
+            ids: HashSet::new(),
+        }
     }
 
     pub fn register(&mut self, module: &dyn Module) -> Result<(), RegistrationError> {
@@ -86,11 +88,26 @@ mod tests {
     #[test]
     fn registry_rejects_scaffolds_and_duplicates() {
         let mut registry = ModuleRegistry::new();
-        assert_eq!(registry.register(&ExampleModule { state: ModuleState::Scaffold }), Err(RegistrationError::NotReady));
+        assert_eq!(
+            registry.register(&ExampleModule {
+                state: ModuleState::Scaffold,
+            }),
+            Err(RegistrationError::NotReady)
+        );
         assert!(!registry.contains("example"));
-        assert_eq!(registry.register(&ExampleModule { state: ModuleState::Ready }), Ok(()));
+        assert_eq!(
+            registry.register(&ExampleModule {
+                state: ModuleState::Ready,
+            }),
+            Ok(())
+        );
         assert!(registry.contains("example"));
-        assert_eq!(registry.register(&ExampleModule { state: ModuleState::Ready }), Err(RegistrationError::DuplicateId));
+        assert_eq!(
+            registry.register(&ExampleModule {
+                state: ModuleState::Ready,
+            }),
+            Err(RegistrationError::DuplicateId)
+        );
     }
     struct Block;
     impl Policy for Block {
