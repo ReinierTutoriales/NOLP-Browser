@@ -7,7 +7,7 @@ impl Module for VaultUnavailable {
         "vault"
     }
     fn state(&self) -> ModuleState {
-        ModuleState::Unavailable
+        ModuleState::Scaffold
     }
 }
 #[cfg(test)]
@@ -15,6 +15,6 @@ mod tests {
     use super::*;
     #[test]
     fn not_claimed_ready() {
-        assert_eq!(VaultUnavailable.state(), ModuleState::Unavailable);
+        assert_eq!(VaultUnavailable.state(), ModuleState::Scaffold);
     }
 }
