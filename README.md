@@ -1,12 +1,12 @@
 <div align="center">
 
-<img src="assets/brand/nolp-wordmark.svg" alt="NOLP — Nex · Óptima · Local · Privada" width="520" />
+<img src="assets/brand/nolp-wordmark.svg" alt="NOLP — Next · Óptima · Local · Privada" width="520" />
 
 </div>
 
 # NOLP
 
-**Nex · Óptima · Local · Privada**
+**Next · Óptima · Local · Privada**
 
 > Un navegador pensado para ofrecer rendimiento, autonomía y privacidad sin depender innecesariamente de servicios en la nube.
 
@@ -14,7 +14,7 @@
 
 ## ¿Qué significa NOLP?
 
-- **N — Nex:** siguiente generación (*next-generation*).
+- **N — Nextt:** siguiente generación (*next-generation*).
 - **O — Óptima:** rendimiento y eficiencia.
 - **L — Local:** tecnología *local-first*.
 - **P — Privada:** privacidad desde el diseño (*privacy-first*).
@@ -88,4 +88,4 @@ El código propio de NOLP se distribuye bajo la **Mozilla Public License 2.0 (MP
 
 ---
 
-**NOLP — Nex · Óptima · Local · Privada.**
+**NOLP — Next · Óptima · Local · Privada.**
