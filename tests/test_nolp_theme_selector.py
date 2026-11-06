@@ -29,6 +29,13 @@ class ThemeSelectorTests(unittest.TestCase):
         self.assertEqual(before, (self.root / selector.PREFS).read_bytes())
         self.assertEqual((self.root / selector.JAR).read_text().count(selector.JAR_ANCHOR), 1)
 
+    def test_auto_is_native_default_theme(self):
+        controller = (selector.SOURCE / "NolpThemeSelector.sys.mjs").read_text()
+        self.assertIn('auto: "default-theme@mozilla.org"', controller)
+        self.assertNotIn("setInterval", controller)
+        self.assertNotIn("matchMedia", controller)
+        self.assertIn("Automático (sistema)", selector.CONTROL)
+
     def test_check_fails_before_install(self):
         with self.assertRaisesRegex(ValueError, "not installed"):
             selector.apply(self.root, check=True)
