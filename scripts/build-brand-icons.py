@@ -9,7 +9,7 @@ import argparse
 import io
 from pathlib import Path
 
-SIZES = (16, 24, 32, 48, 64, 128, 256, 512, 1024, 2048)
+SIZES = (16, 24, 32, 48, 64, 128, 192, 256, 512, 1024, 2048)
 ICO_SIZES = (16, 24, 32, 48, 64, 128, 256)
 
 
