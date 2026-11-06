@@ -30,9 +30,14 @@ def evaluate_runs(runs_by_name):
 def main():
     repo = os.environ["GITHUB_REPOSITORY"]
     sha = os.environ["GITHUB_SHA"]
+    event = os.environ.get("GITHUB_EVENT_NAME", "push")
+    if event == "pull_request":
+        with open(os.environ["GITHUB_EVENT_PATH"], encoding="utf-8") as handle:
+            sha = json.load(handle)["pull_request"]["head"]["sha"]
     token = os.environ["GITHUB_TOKEN"]
     api = os.environ.get("GITHUB_API_URL", "https://api.github.com")
     found = {}
+    allowed_events = ("pull_request",) if event == "pull_request" else ("push", "workflow_dispatch")
     for page in range(1, 6):
         url = f"{api}/repos/{repo}/actions/runs?head_sha={sha}&per_page=100&page={page}"
         request = urllib.request.Request(url, headers={
@@ -44,7 +49,7 @@ def main():
             data = json.load(response)
         runs = data.get("workflow_runs", [])
         for run in runs:
-            if run.get("head_sha") != sha or run.get("event") not in ("push", "workflow_dispatch"):
+            if run.get("head_sha") != sha or run.get("event") not in allowed_events:
                 continue
             name = run.get("name")
             if name in REQUIRED:
