@@ -1,3 +1,9 @@
+<div align="center">
+
+<img src="assets/brand/nolp-wordmark.svg" alt="NOLP — Nexo Óptimo Local y Privado" width="520" />
+
+</div>
+
 # NOLP
 
 **Nexo Óptimo Local y Privado**
@@ -61,6 +67,10 @@ El bloqueo de anuncios y rastreadores se diseñará como un componente independi
 - [ ] Publicar versiones reproducibles y documentación de seguridad.
 
 La prioridad será disponer primero de una base verificable y mantenible, antes de añadir funcionalidades avanzadas.
+
+## Identidad visual
+
+El símbolo vectorial oficial se encuentra en [`assets/brand/nolp-icon.svg`](assets/brand/nolp-icon.svg), la marca horizontal en [`assets/brand/nolp-wordmark.svg`](assets/brand/nolp-wordmark.svg) y las reglas de uso en [`docs/BRAND.md`](docs/BRAND.md). Los recursos para aplicaciones se generarán a partir de estos originales al implementar cada plataforma.
 
 ## Desarrollo y contribuciones
 
