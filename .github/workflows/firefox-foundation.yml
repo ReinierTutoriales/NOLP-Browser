@@ -32,6 +32,8 @@ jobs:
           bash -n scripts/bootstrap-firefox.sh
           bash -n scripts/smoke-firefox.sh
           bash -n scripts/smoke-gecko-navigation.sh
+          bash -n scripts/run-nolp-desktop.sh
+          python3 -m unittest discover -s tests -p 'test_desktop_launcher.py' -v
           python3 - <<'PY'
           import pathlib, re, tomllib
           data=tomllib.loads(pathlib.Path("engine/upstream-manifest/firefox.toml").read_text())
