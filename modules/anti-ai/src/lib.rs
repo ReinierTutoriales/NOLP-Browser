@@ -1,5 +1,5 @@
 //! Local explicit host rules only; no general AI detection.
-use nolp_contracts::{Decision, Policy, Request, Verdict};
+use nolp_contracts::{normalized_dns_host, Decision, Policy, Request, Verdict};
 use std::collections::HashSet;
 
 pub struct AntiAi {
@@ -10,7 +10,7 @@ impl AntiAi {
     pub fn new(hosts: impl IntoIterator<Item = String>) -> Self {
         Self {
             enabled: true,
-            hosts: hosts.into_iter().map(|h| h.to_ascii_lowercase()).collect(),
+            hosts: hosts.into_iter().filter_map(|h| normalized_dns_host(&h)).collect(),
         }
     }
     pub fn set_enabled(&mut self, enabled: bool) {
@@ -19,7 +19,7 @@ impl AntiAi {
 }
 impl Policy for AntiAi {
     fn evaluate(&self, request: &Request<'_>) -> Verdict {
-        if self.enabled && self.hosts.contains(&request.host.to_ascii_lowercase()) {
+        if self.enabled && normalized_dns_host(request.host).is_some_and(|host| self.hosts.contains(&host)) {
             Verdict {
                 decision: Decision::Block,
                 reason: "explicit-ai-host-rule",
