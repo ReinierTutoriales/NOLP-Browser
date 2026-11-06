@@ -34,9 +34,7 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy, rustfmt
-      - name: Normalize Rust formatting for CI compilation
-        run: cargo fmt --all
-      - name: Check formatting of normalized sources
+      - name: Enforce committed Rust formatting
         run: cargo fmt --all -- --check
       - name: Lint Rust workspace
         run: cargo clippy --workspace --all-targets --locked -- -D warnings
