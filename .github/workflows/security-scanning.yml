@@ -2,14 +2,6 @@ name: Security scanning
 on:
   push:
     branches: [main]
-    paths:
-      - 'Cargo.toml'
-      - 'Cargo.lock'
-      - 'modules/**'
-      - 'integration/**'
-      - 'scripts/**'
-      - 'tests/**'
-      - '.github/workflows/security-scanning.yml'
   pull_request:
   workflow_dispatch:
   schedule:
