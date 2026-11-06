@@ -27,3 +27,9 @@ No anunciar una versión NOLP hasta que se haya compilado, ejecutado y probado e
 ## GitHub Actions
 
 El workflow `Firefox foundation` valida el manifiesto en cada cambio relevante. La compilación de Firefox se intenta automáticamente en los pushes a `main` que afectan al motor, scripts o workflow; también puede ejecutarse manualmente (`workflow_dispatch`, opción `build_firefox`). Puede consumir recursos importantes y **no constituye una compilación NOLP**. La CI valida la revisión y la versión upstream, intenta construir en modo artifact y ejecutar `./mach run --version`; **esto no verifica navegación ni inicio gráfico completo**. Ante un fallo se adjuntan diagnósticos básicos de disco y memoria. No hay evidencia de una ejecución satisfactoria hasta consultar los logs del workflow.
+
+## Primera prueba de renderizado Gecko
+
+El workflow `Firefox foundation` ahora ejecuta `scripts/smoke-gecko-navigation.sh` después de compilar Firefox. Abre una página HTML local en modo headless con un perfil temporal aislado, captura una imagen PNG, valida su cabecera y dimensiones y limpia el perfil al finalizar. El comando está limitado a 90 segundos para evitar bloqueos indefinidos.
+
+Esta prueba verifica renderizado real cuando pasa en CI; **no** prueba todavía navegación HTTPS, integración del motor con el código Rust, interfaz NOLP, bloqueo de solicitudes ni distribución de una aplicación propia. Hasta que termine la ejecución correspondiente, la nueva prueba permanece **pendiente de validación**.
