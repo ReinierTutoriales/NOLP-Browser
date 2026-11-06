@@ -65,3 +65,27 @@ scripts/check-modules.py    # Verificación estructural inicial
 - Pruebas de compatibilidad en plataformas soportadas antes de publicar.
 
 **Importante:** el manifiesto inicial y su validador verifican solo estructura y dependencias declaradas; no prueban aislamiento de procesos, ausencia de imports indebidos, rendimiento ni implementación funcional. Estas garantías se incorporarán a medida que exista código compilable.
+
+## Contraste con documentación oficial (6 de noviembre de 2026)
+Fuentes primarias consultadas:
+- Arquitectura Gecko: https://firefox-source-docs.mozilla.org/overview/gecko.html
+- Sistema de compilación: https://firefox-source-docs.mozilla.org/build/buildsystem/
+- moz.build: https://firefox-source-docs.mozilla.org/build/buildsystem/mozbuild-files.html
+- Rust en Firefox: https://firefox-source-docs.mozilla.org/writing-rust-code/index.html
+- Artifact Builds y restricciones: https://firefox-source-docs.mozilla.org/contributing/build/artifact_builds.html
+- Cargo Workspaces: https://doc.rust-lang.org/stable/cargo/reference/workspaces.html
+- Gobernanza de módulos Mozilla: https://firefox-source-docs.mozilla.org/mots/
+
+### Decisiones de integración
+1. **Frontend:** preferir APIs frontend, WebExtensions y módulos JS soportados para funciones que no requieren modificar código nativo. Probar con xpcshell, mochitest y browser-chrome según su capa.
+2. **Motor:** respetar las interfaces Gecko existentes (XPCOM/WebIDL, JSActors o IPDL solo cuando sea apropiado); evitar introducir nuevas capas IPC sin necesidad medida.
+3. **Rust:** cuando existan crates reales, utilizar Cargo Workspaces para compartir lockfile y ejecutar pruebas por paquete. Integrar Rust en Gecko mediante el sistema de compilación documentado de Mozilla, no mediante copias manuales de binarios.
+4. **Dos rutas de compilación:** Artifact Builds únicamente para cambios compatibles (principalmente JS, HTML, CSS y recursos). **Compilación nativa completa obligatoria** para C/C++/Rust, WebIDL o modificaciones no soportadas por artifact mode.
+5. **Precaución crítica:** Mozilla documenta requisitos de git-cinnabar para artifact builds sobre clones Git; no considerar el flujo actual de GitHub clonando mozilla-firefox como validado hasta demostrar resolución de artefactos y ejecución real.
+6. **Contratos:** interfaces estables en el límite de nuestros módulos; dentro de Gecko usar las interfaces soportadas, sin imponer un protocolo universal ni duplicar abstractions upstream.
+7. **Seguridad:** el aislamiento lógico por crates no sustituye al sandbox de procesos de Gecko. Revisión de capacidades, secretos, actualizaciones y límites de confianza por separado.
+8. **CI:** ejecutar pruebas de cada módulo afectado y pruebas de integración inversa. Publicar resultados verificables y no confundir el manifiesto con validación de dependencias del código.
+9. **Actualizaciones:** no adoptar versiones solo por ser las más recientes; preferir versiones estables compatibles, con changelog, CVEs, pruebas y reversión.
+
+### Próximo cambio ejecutable
+Validar primero el flujo Artifact Build con fuente compatible y pruebas de arranque. Antes de integrar el primer crate nativo, preparar un job de compilación completa independiente; evitar que la CI rápida declare cobertura nativa inexistente.
