@@ -33,3 +33,13 @@ El workflow `Firefox foundation` valida el manifiesto en cada cambio relevante. 
 El workflow `Firefox foundation` ahora ejecuta `scripts/smoke-gecko-navigation.sh` después de compilar Firefox. Abre una página HTML local en modo headless con un perfil temporal aislado, captura una imagen PNG, valida su cabecera y dimensiones y limpia el perfil al finalizar. El comando está limitado a 90 segundos para evitar bloqueos indefinidos.
 
 Esta prueba verifica renderizado real cuando pasa en CI; **no** prueba todavía navegación HTTPS, integración del motor con el código Rust, interfaz NOLP, bloqueo de solicitudes ni distribución de una aplicación propia. Hasta que termine la ejecución correspondiente, la nueva prueba permanece **pendiente de validación**.
+
+## Linux desktop development launcher (upstream Firefox)
+
+After a successful Firefox artifact build on a Linux graphical session:
+
+```bash
+bash scripts/run-nolp-desktop.sh https://example.org
+```
+
+The launcher validates the pinned Git revision, rejects non-HTTPS user URLs, requires a graphical session and uses a separate profile under `.local/nolp-desktop-profile` (permissions 0700). It delegates to upstream `./mach run` and does **not** integrate the Rust Gecko adapter, add a NOLP UI, or intercept network requests. The profile is persistent for development; delete it manually if isolation reset is required. The CI includes launcher syntax and argument-validation tests. This is a **development harness**, not a distributable NOLP Alpha.
