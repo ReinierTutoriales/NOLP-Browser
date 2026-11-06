@@ -39,9 +39,15 @@ pub enum Theme {
 }
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum ModuleState {
+    Scaffold,
     Ready,
     Unavailable,
     RequiresConsent,
+}
+impl ModuleState {
+    pub const fn is_operational(self) -> bool {
+        matches!(self, Self::Ready)
+    }
 }
 pub trait Module: Send + Sync {
     fn id(&self) -> &'static str;
@@ -54,5 +60,9 @@ mod tests {
     fn contract_values() {
         assert_ne!(Decision::Allow, Decision::Block);
         assert_ne!(Theme::AeroLight, Theme::AeroDark);
+        assert!(!ModuleState::Scaffold.is_operational());
+        assert!(!ModuleState::Unavailable.is_operational());
+        assert!(!ModuleState::RequiresConsent.is_operational());
+        assert!(ModuleState::Ready.is_operational());
     }
 }
