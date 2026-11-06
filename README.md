@@ -46,7 +46,7 @@ Construir un navegador multiplataforma con una experiencia rápida y consistente
 | Plataforma | Integración con sistemas operativos, sandbox, permisos y actualizaciones. |
 | Pruebas | Seguridad, compatibilidad, regresiones y benchmarks de rendimiento. |
 
-**Motor seleccionado:** Firefox/Gecko para escritorio y GeckoView para Android/TV. Actualmente solo existe el andamiaje de integración, con una revisión candidata fijada: no hay motor compilado ni ejecutable NOLP. iOS/iPadOS sigue sujeto a validación específica.
+**Motor seleccionado:** Firefox/Gecko para escritorio y GeckoView para Android/TV. Actualmente solo existe el andamiaje de integración, con la revisión oficial de Firefox 159.0.1 fijada: no hay motor compilado ni ejecutable NOLP. iOS/iPadOS sigue sujeto a validación específica.
 
 ## Privacidad y seguridad
 
@@ -61,7 +61,7 @@ La referencia central para saber exactamente **qué existe, qué falta y cómo c
 ## Hoja de ruta
 
 - [ ] Definir plataformas objetivo y matriz de compatibilidad.
-- [x] Seleccionar Firefox/Gecko como base y documentar estrategia inicial de actualización (pendiente validar release estable y build).
+- [x] Seleccionar Firefox/Gecko como base y documentar estrategia inicial de actualización (release estable 159.0.1 verificada; build pendiente).
 - [x] Documentar el modelo inicial de amenazas y las políticas de privacidad (implementación pendiente).
 - [x] Diseñar la arquitectura modular y sus contratos (implementación pendiente).
 - [ ] Implementar un prototipo mínimo de navegación.
