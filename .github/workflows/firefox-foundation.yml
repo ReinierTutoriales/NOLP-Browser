@@ -1,15 +1,8 @@
 name: Firefox foundation
 on:
   push:
-    paths:
-      - 'engine/upstream-manifest/firefox.toml'
-      - 'scripts/**'
-      - '.github/workflows/firefox-foundation.yml'
+    branches: [main]
   pull_request:
-    paths:
-      - 'engine/upstream-manifest/firefox.toml'
-      - 'scripts/**'
-      - '.github/workflows/firefox-foundation.yml'
   workflow_dispatch:
     inputs:
       build_firefox:
@@ -46,7 +39,7 @@ jobs:
           PY
 
   artifact-build:
-    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'workflow_dispatch' && inputs.build_firefox)
+    if: github.event_name == 'workflow_dispatch' && inputs.build_firefox
     needs: validate
     runs-on: ubuntu-24.04
     timeout-minutes: 180
