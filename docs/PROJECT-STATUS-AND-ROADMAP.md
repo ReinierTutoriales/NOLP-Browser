@@ -200,3 +200,9 @@ Sin ejecución real, marcar **pendiente/no verificado**. No usar el estado del r
 - La CI ya **no** modifica archivos antes de comprobar formato. Usa `cargo clippy --workspace --all-targets --locked -- -D warnings` y `cargo test --workspace --locked`.
 - Se corrigieron los estados falsamente `Ready` de `privacy` e `identity-local`: siguen sin implementación persistente ni integración real y devuelven `Unavailable`.
 - El lockfile fue escrito según el grafo de dependencias locales y está pendiente de validación por Cargo; no se ha ejecutado una compilación ni se han recuperado logs de GitHub Actions. El resultado real de CI sigue **sin verificar**.
+
+## Diagnóstico CI dividido por etapa (2026-11-06)
+- Workflow `modules.yml` dividido en seis jobs independientes: manifiesto/lockfile, formato, resolución y compilación Rust, Clippy, tests Rust y tests Python.
+- Se añadieron `cargo metadata --locked --offline` y `cargo check --workspace --all-targets --locked --offline` para detectar errores de resolución/compilación antes de atribuirlos a lint o tests.
+- Cada job conserva su propio estado y fallo en Actions; no usa `continue-on-error`, ni modifica archivos del checkout. La CI sigue sin ejecución confirmada por esta sesión.
+- **Limitación de acceso:** el conector disponible no lista ejecuciones generales de Actions, y su consulta por commit filtra ejecuciones de pull requests. Un resultado vacío no implica éxito ni ausencia de fallos.
