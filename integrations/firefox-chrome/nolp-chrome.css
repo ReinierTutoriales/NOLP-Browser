@@ -1,0 +1,26 @@
+/* NOLP native Firefox chrome: two themes, no backdrop filters or web-content styling. */
+@media (-moz-bool-pref: "nolp.theme.enabled") {
+  :root[brighttext] {
+    --nolp-chrome-bg: #181b23;
+    --nolp-chrome-fg: #f4f5fa;
+    --nolp-chrome-edge: #454b60;
+    --nolp-accent: #a48aff;
+  }
+  :root:not([brighttext]) {
+    --nolp-chrome-bg: #f1f3f8;
+    --nolp-chrome-fg: #202431;
+    --nolp-chrome-edge: #b8becd;
+    --nolp-accent: #6742bb;
+  }
+  :root {
+    --toolbar-bgcolor: var(--nolp-chrome-bg) !important;
+    --toolbar-color: var(--nolp-chrome-fg) !important;
+    --lwt-accent-color: var(--nolp-chrome-bg) !important;
+    --lwt-text-color: var(--nolp-chrome-fg) !important;
+    --toolbar-field-border-color: var(--nolp-chrome-edge) !important;
+    --focus-outline-color: var(--nolp-accent) !important;
+  }
+}
+@media (forced-colors: active) {
+  :root { --toolbar-bgcolor: Canvas !important; --toolbar-color: CanvasText !important; }
+}
