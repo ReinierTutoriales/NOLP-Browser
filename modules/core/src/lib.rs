@@ -127,7 +127,14 @@ mod tests {
     fn invalid_host_fails_closed() {
         let chain = PolicyChain::new();
         for host in ["", "https://example.com", "a..b", "127.0.0.1"] {
-            assert_eq!(chain.evaluate(&Request { host, private: false }).decision, Decision::Block);
+            assert_eq!(
+                chain.evaluate(&Request {
+                    host,
+                    private: false,
+                })
+                .decision,
+                Decision::Block
+            );
         }
     }
     #[test]
