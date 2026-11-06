@@ -1,23 +1,8 @@
 name: Module boundaries
 on:
   push:
-    paths:
-      - 'modules/**'
-      - 'integration/**'
-      - 'Cargo.toml'
-      - 'Cargo.lock'
-      - 'scripts/check-modules.py'
-      - 'tests/test_network_policy.py'
-      - '.github/workflows/modules.yml'
+    branches: [main]
   pull_request:
-    paths:
-      - 'modules/**'
-      - 'integration/**'
-      - 'Cargo.toml'
-      - 'Cargo.lock'
-      - 'tests/test_network_policy.py'
-      - 'scripts/check-modules.py'
-      - '.github/workflows/modules.yml'
   workflow_dispatch:
 
 permissions:
