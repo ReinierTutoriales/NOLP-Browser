@@ -7,6 +7,6 @@ impl Module for AndroidUnavailable {
         "platform-android"
     }
     fn state(&self) -> ModuleState {
-        ModuleState::Unavailable
+        ModuleState::Scaffold
     }
 }
