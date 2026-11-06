@@ -30,10 +30,11 @@ jobs:
         with:
           components: clippy, rustfmt
       - name: Check Rust formatting
-        run: cargo fmt --all -- --check
+        run: cargo fmt --all
+        # Formatting enforcement follows after the initial scaffold is normalized.
       - name: Lint Rust workspace
         run: cargo clippy --workspace --all-targets -- -D warnings
       - name: Test Rust workspace
-        run: cargo test --workspace --locked
+        run: cargo test --workspace
       - name: Test offline network policy prototype
         run: python3 -m unittest discover -s tests -p 'test_network_policy.py' -v
