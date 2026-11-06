@@ -41,3 +41,9 @@ Aplicar al actualizar Gecko/Firefox, GeckoView, Rust, Android, UI, librerías, c
 
 ## Evidencia
 Actualizar `docs/UPSTREAM-STATUS.md` con la versión exacta, referencia upstream, fecha de consulta, estado de compilación, resultado y pendiente. Si no hay acceso a fuentes o CI, registrar **sin verificar** en vez de afirmar actualidad.
+
+## Actualización de UI, Rust y FFI
+- Consultar `docs/UI-CROSS-PLATFORM-ARCHITECTURE.md` y verificar documentación oficial vigente de Firefox Chrome UI, GeckoView, Android Compose/Compose for TV, Cargo y Mozilla UniFFI.
+- Antes de adoptar nuevas versiones, revisar compatibilidad ABI/API, toolchains, generadores de bindings, soporte por plataforma y pruebas de consumidores.
+- No introducir Tauri ni un segundo motor WebView como base de NOLP sin una decisión arquitectónica explícita y evidencia de beneficio.
+- Registrar versiones exactas y pruebas de FFI, compilación nativa, accesibilidad y rendimiento; nunca declarar soporte multiplataforma sin builds verificadas.
