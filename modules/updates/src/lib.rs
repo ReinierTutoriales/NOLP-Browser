@@ -7,6 +7,6 @@ impl Module for UpdatesUnavailable {
         "updates"
     }
     fn state(&self) -> ModuleState {
-        ModuleState::Unavailable
+        ModuleState::Scaffold
     }
 }
