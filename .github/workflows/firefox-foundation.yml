@@ -27,6 +27,7 @@ jobs:
           bash -n scripts/smoke-gecko-navigation.sh
           bash -n scripts/run-nolp-desktop.sh
           python3 -m unittest discover -s tests -p 'test_desktop_launcher.py' -v
+          python3 -m unittest discover -s tests -p 'test_firefox_chrome_overlay.py' -v
           python3 - <<'PY'
           import pathlib, re, tomllib
           data=tomllib.loads(pathlib.Path("engine/upstream-manifest/firefox.toml").read_text())
@@ -61,6 +62,10 @@ jobs:
         run: |
           test "$(cat .upstream/firefox/browser/config/version.txt)" = "159.0.1"
           bash scripts/smoke-firefox.sh
+      - name: Apply and verify NOLP Firefox chrome overlay
+        run: |
+          python3 scripts/apply-firefox-chrome.py --firefox-dir .upstream/firefox
+          python3 scripts/apply-firefox-chrome.py --firefox-dir .upstream/firefox --check
       - name: Configure artifact build
         run: |
           cat > .upstream/firefox/mozconfig <<'EOF'
