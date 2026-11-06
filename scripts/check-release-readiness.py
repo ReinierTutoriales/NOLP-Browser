@@ -3,7 +3,6 @@
 import json
 import os
 import sys
-import urllib.error
 import urllib.request
 
 REQUIRED = {
@@ -15,6 +14,18 @@ REQUIRED = {
     "Firefox foundation",
 }
 
+
+def evaluate_runs(runs_by_name):
+    """Use the newest run; a stale success must never mask a failure."""
+    failures = []
+    for name in sorted(REQUIRED):
+        runs = runs_by_name.get(name, [])
+        latest = max(runs, key=lambda run: (run.get('id', 0), run.get('run_attempt', 1)), default=None)
+        ok = bool(latest and latest.get('status') == 'completed' and latest.get('conclusion') == 'success')
+        print(f"{name}: {'PASS' if ok else 'MISSING/FAILED'}")
+        if not ok:
+            failures.append(name)
+    return failures
 
 def main():
     repo = os.environ["GITHUB_REPOSITORY"]
@@ -41,13 +52,7 @@ def main():
         if len(runs) < 100:
             break
 
-    failures = []
-    for name in sorted(REQUIRED):
-        runs = found.get(name, [])
-        ok = any(run.get("status") == "completed" and run.get("conclusion") == "success" for run in runs)
-        print(f"{name}: {'PASS' if ok else 'MISSING/FAILED'}")
-        if not ok:
-            failures.append(name)
+    failures = evaluate_runs(found)
     if failures:
         print("Release blocked: missing or unsuccessful mandatory checks for exact commit.", file=sys.stderr)
         return 1
