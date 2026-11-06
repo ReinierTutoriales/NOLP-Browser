@@ -28,6 +28,7 @@ jobs:
           bash -n scripts/run-nolp-desktop.sh
           python3 -m unittest discover -s tests -p 'test_desktop_launcher.py' -v
           python3 -m unittest discover -s tests -p 'test_firefox_chrome_overlay.py' -v
+          python3 -m unittest discover -s tests -p 'test_nolp_theme_selector.py' -v
           python3 - <<'PY'
           import pathlib, re, tomllib
           data=tomllib.loads(pathlib.Path("engine/upstream-manifest/firefox.toml").read_text())
@@ -66,6 +67,10 @@ jobs:
         run: |
           python3 scripts/apply-firefox-chrome.py --firefox-dir .upstream/firefox
           python3 scripts/apply-firefox-chrome.py --firefox-dir .upstream/firefox --check
+      - name: Apply and verify native NOLP theme picker
+        run: |
+          python3 scripts/apply-nolp-theme-selector.py --firefox-dir .upstream/firefox
+          python3 scripts/apply-nolp-theme-selector.py --firefox-dir .upstream/firefox --check
       - name: Configure artifact build
         run: |
           cat > .upstream/firefox/mozconfig <<'EOF'
