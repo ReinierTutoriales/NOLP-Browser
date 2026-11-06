@@ -29,3 +29,11 @@ Filtrado de red y cosmético con excepciones explícitas. Scriptlets de catálog
 
 ## Verificación mínima
 Pruebas de extracción de perfil bloqueado, integridad y restauración, migración y caída de energía, permisos, tráfico saliente, regresión de sandbox, vulnerabilidades de dependencias y firmas de actualización.
+
+## Preferencias de IA y cuentas (política)
+- El filtro anti-IA debe estar activado en nuevas instalaciones; debe poder desactivarse desde la interfaz y respetar la elección local del usuario.
+- Su política debe distinguir funciones propias del navegador, solicitudes de red conocidas y elementos web; mantener listas auditables, excepciones por sitio y pruebas de falsos positivos. No afirmar bloqueo universal de IA.
+- Los perfiles locales son el modo predeterminado. No iniciar sesión, sincronizar, exportar datos ni conectar a Firefox Accounts sin elección explícita del usuario.
+- Firefox Account será una opción únicamente si puede integrarse con mecanismos oficiales y compatibilidad verificada. Requerir consentimiento antes de activar categorías de sincronización; documentar datos transferidos, finalidad y revocación.
+- Las credenciales locales deben permanecer cifradas mediante mecanismos auditados y llaves protegidas por plataforma; no migrarlas automáticamente a servicios externos.
+- Estado: **requisitos, no funcionalidades implementadas**.
