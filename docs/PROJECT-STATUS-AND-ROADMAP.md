@@ -170,3 +170,11 @@ Sin ejecución real, marcar **pendiente/no verificado**. No usar el estado del r
 - No hay todavía evidencias de compilación del motor, tráfico DNS, compatibilidad HTTP/3 ni benchmarks de red.
 - Orden de trabajo: (1) verificar Gecko; (2) contratos de políticas; (3) adaptador; (4) integración de filtros; (5) pruebas de fugas, compatibilidad y rendimiento.
 - Criterio para declarar implementado un módulo: código ejecutable, tests y evidencia de integración, no solo inventario.
+
+## UI multiplataforma y Rust: decisión documentada (2026-11-06)
+
+- **Guía normativa:** `docs/UI-CROSS-PLATFORM-ARCHITECTURE.md`, enlazada desde diseño, modularidad, ingeniería, AGENTS y skills.
+- **Decisión:** lógica y tokens compartidos; Firefox Chrome UI en escritorio, Compose/GeckoView como propuesta para Android/TV; no añadir un motor WebView paralelo.
+- **Comunicación:** Rust local con traits y llamadas tipadas; FFI donde corresponda; IPC únicamente en límites entre procesos; eventos incrementales con control de flujo.
+- **Estado real:** arquitectura documentada; sin contratos de UI compilados, integración Rust/Gecko, UI NOLP ejecutable ni benchmarks verificados.
+- **Próximo criterio de aceptación:** compilar Gecko upstream, crear contratos de estado con pruebas y validar un recorrido de navegación extremo a extremo.
