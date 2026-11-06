@@ -1,20 +1,46 @@
-/* NOLP Chrome UI theme: reuse Firefox's native light/dark color scheme.
- * No web-content selectors, backdrop filters or additional UI renderer.
- * Opt-in preference: nolp.theme.enabled (disabled by default until validated).
+/* NOLP Desktop Chrome identity on Firefox's native theme infrastructure.
+ * Uses Firefox's own color-scheme, toolbars, tabs and focus handling.
+ * No changes to website content, origin identity, permission prompts or private-mode signals.
  */
 @media -moz-pref("nolp.theme.enabled") {
   @media not (forced-colors) {
     :root {
-      --nolp-chrome-bg: light-dark(#f1f3f8, #181b23);
-      --nolp-chrome-fg: light-dark(#202431, #f4f5fa);
-      --nolp-chrome-edge: light-dark(#b8becd, #454b60);
-      --nolp-accent: light-dark(#6742bb, #a48aff);
-      --toolbar-bgcolor: var(--nolp-chrome-bg);
-      --toolbar-color: var(--nolp-chrome-fg);
-      --lwt-accent-color: var(--nolp-chrome-bg);
-      --lwt-text-color: var(--nolp-chrome-fg);
-      --toolbar-field-border-color: var(--nolp-chrome-edge);
+      --nolp-surface: light-dark(#f3f4fa, #171923);
+      --nolp-toolbar: light-dark(#ffffff, #24283a);
+      --nolp-text: light-dark(#252437, #f5f3ff);
+      --nolp-border: light-dark(#b8becd, #454b60);
+      --nolp-accent: light-dark(#6245b3, #a995ff);
+      --nolp-muted: light-dark(#54566a, #c9c8d4);
+      --toolbar-bgcolor: var(--nolp-toolbar);
+      --toolbar-color: var(--nolp-text);
+      --lwt-accent-color: var(--nolp-surface);
+      --lwt-text-color: var(--nolp-text);
+      --toolbar-field-border-color: var(--nolp-border);
       --focus-outline-color: var(--nolp-accent);
+      --tab-border-radius: 4px;
+      --toolbarbutton-border-radius: 4px;
+    }
+
+    /* Keep the native Urlbar, tabs, and panels; tune only shared chrome surfaces. */
+    #navigator-toolbox {
+      border-bottom-color: var(--nolp-border);
+    }
+
+    #nav-bar {
+      background-color: var(--nolp-toolbar);
+    }
+
+    #urlbar-background {
+      border-color: var(--nolp-border);
+      border-radius: 4px;
+    }
+
+    .tab-background {
+      border-radius: 4px 4px 0 0;
+    }
+
+    .tabbrowser-tab[selected] .tab-background {
+      outline-color: var(--nolp-accent);
     }
   }
 }
