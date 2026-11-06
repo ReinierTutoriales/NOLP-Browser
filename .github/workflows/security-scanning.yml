@@ -1,0 +1,66 @@
+name: Security scanning
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - 'modules/**'
+      - 'integration/**'
+      - 'scripts/**'
+      - 'tests/**'
+      - '.github/workflows/security-scanning.yml'
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 9 * * *'
+
+permissions:
+  contents: read
+
+jobs:
+  rustsec:
+    name: RustSec dependency advisories
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Install cargo-audit (locked)
+        run: cargo install cargo-audit --locked
+      - name: Audit Rust dependency lockfile
+        run: cargo audit --deny warnings
+
+  secrets:
+    name: Gitleaks tracked history
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 'stable'
+      - name: Install reviewed Gitleaks release
+        run: go install github.com/gitleaks/gitleaks/v8@v8.30.1
+      - name: Scan repository history and working tree
+        run: |
+          "$(go env GOPATH)/bin/gitleaks" git --redact --exit-code 1 --log-opts="--all" .
+
+  codeql:
+    name: CodeQL Python static analysis
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@9418214df1f2c4b8128c770156c409013b07d6b9 # v3
+        with:
+          languages: python
+          queries: security-extended
+      - name: Analyze Python code
+        uses: github/codeql-action/analyze@9418214df1f2c4b8128c770156c409013b07d6b9 # v3
