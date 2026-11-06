@@ -66,3 +66,9 @@ Si existe conflicto, priorizar protección del usuario y compatibilidad de segur
 ## Identidad visual obligatoria
 - Seguir `docs/UI-DESIGN-SYSTEM.md`: únicamente Aero Light y Aero Dark, ambos translúcidos con fallback opaco seguro.
 - No introducir temas extra, skins heredadas ni efectos costosos sin benchmarks. La accesibilidad puede reducir transparencia y movimiento sin constituir otro tema.
+
+## Arquitectura modular obligatoria
+- Consultar `docs/MODULAR-ARCHITECTURE.md` y `modules/manifest.json` antes de modificar componentes.
+- Los módulos funcionales solo dependen de contratos públicos versionados, nunca de detalles internos de otros módulos; composición en el núcleo.
+- Cambios de contrato requieren pruebas de compatibilidad y migración. No declarar independencia real solo por carpetas o manifiestos.
+- Ejecutar `python3 scripts/check-modules.py` y pruebas específicas de los módulos afectados; ampliar verificaciones de imports y compilación cuando haya implementaciones.
