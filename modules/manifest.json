@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "architecture": "ports-and-adapters",
+  "modules": [
+    {
+      "id": "contracts",
+      "status": "planned",
+      "dependencies": [],
+      "public_api_version": "0.0.0"
+    },
+    {
+      "id": "core",
+      "status": "planned",
+      "dependencies": [
+        "contracts"
+      ],
+      "public_api_version": "0.0.0"
+    },
+    {
+      "id": "engine-gecko",
+      "status": "planned",
+      "dependencies": [
+        "contracts"
+      ],
+      "public_api_version": "0.0.0"
+    },
+    {
+      "id": "ui-aero",
+      "status": "planned",
+      "dependencies": [
+        "contracts"
+      ],
+      "public_api_version": "0.0.0"
+    },
+    {
+      "id": "privacy",
+      "status": "planned",
+      "dependencies": [
+        "contracts"
+      ],
+      "public_api_version": "0.0.0"
+    },
+    {
+      "id": "content-blocker",
+      "status": "planned",
+      "dependencies": [
+        "contracts"
+      ],
+      "public_api_version": "0.0.0"
+    },
+    {
+      "id": "anti-ai",
+      "status": "planned",
+      "dependencies": [
+        "contracts"
+      ],
+      "public_api_version": "0.0.0"
+    },
+    {
+      "id": "identity-local",
+      "status": "planned",
+      "dependencies": [
+        "contracts"
+      ],
+      "public_api_version": "0.0.0"
+    },
+    {
+      "id": "identity-firefox",
+      "status": "planned",
+      "dependencies": [
+        "contracts"
+      ],
+      "public_api_version": "0.0.0"
+    },
+    {
+      "id": "vault",
+      "status": "planned",
+      "dependencies": [
+        "contracts"
+      ],
+      "public_api_version": "0.0.0"
+    },
+    {
+      "id": "media",
+      "status": "planned",
+      "dependencies": [
+        "contracts"
+      ],
+      "public_api_version": "0.0.0"
+    },
+    {
+      "id": "updates",
+      "status": "planned",
+      "dependencies": [
+        "contracts"
+      ],
+      "public_api_version": "0.0.0"
+    },
+    {
+      "id": "platform-desktop",
+      "status": "planned",
+      "dependencies": [
+        "contracts"
+      ],
+      "public_api_version": "0.0.0"
+    },
+    {
+      "id": "platform-android",
+      "status": "planned",
+      "dependencies": [
+        "contracts"
+      ],
+      "public_api_version": "0.0.0"
+    }
+  ]
+}
