@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/brand/nolp-icon.svg" alt="Logotipo NOLP: monograma N violeta, azul y cian con anillo abierto" width="220" height="220" />
+<img src="assets/brand/nolp-official.png" alt="Logotipo oficial NOLP 3D en violeta, azul y cian" width="220" height="220" />
 
 </div>
 
