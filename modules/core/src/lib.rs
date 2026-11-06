@@ -1,5 +1,45 @@
 //! Composition root: owns adapters via contracts, not concrete crates.
-use nolp_contracts::{Decision, Policy, Request, Verdict};
+use nolp_contracts::{Decision, Module, ModuleState, Policy, Request, Verdict};
+use std::collections::HashSet;
+
+/// Runtime admission of independently implemented modules.
+/// A declared scaffold is never an operational capability.
+pub struct ModuleRegistry {
+    ids: HashSet<&'static str>,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum RegistrationError {
+    NotReady,
+    DuplicateId,
+}
+
+impl ModuleRegistry {
+    pub fn new() -> Self {
+        Self { ids: HashSet::new() }
+    }
+
+    pub fn register(&mut self, module: &dyn Module) -> Result<(), RegistrationError> {
+        if module.state() != ModuleState::Ready {
+            return Err(RegistrationError::NotReady);
+        }
+        if !self.ids.insert(module.id()) {
+            return Err(RegistrationError::DuplicateId);
+        }
+        Ok(())
+    }
+
+    pub fn contains(&self, id: &str) -> bool {
+        self.ids.contains(id)
+    }
+}
+
+impl Default for ModuleRegistry {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 
 pub struct PolicyChain {
     policies: Vec<Box<dyn Policy>>,
@@ -32,6 +72,26 @@ impl Default for PolicyChain {
 #[cfg(test)]
 mod tests {
     use super::*;
+    struct ExampleModule {
+        state: ModuleState,
+    }
+    impl Module for ExampleModule {
+        fn id(&self) -> &'static str {
+            "example"
+        }
+        fn state(&self) -> ModuleState {
+            self.state
+        }
+    }
+    #[test]
+    fn registry_rejects_scaffolds_and_duplicates() {
+        let mut registry = ModuleRegistry::new();
+        assert_eq!(registry.register(&ExampleModule { state: ModuleState::Scaffold }), Err(RegistrationError::NotReady));
+        assert!(!registry.contains("example"));
+        assert_eq!(registry.register(&ExampleModule { state: ModuleState::Ready }), Ok(()));
+        assert!(registry.contains("example"));
+        assert_eq!(registry.register(&ExampleModule { state: ModuleState::Ready }), Err(RegistrationError::DuplicateId));
+    }
     struct Block;
     impl Policy for Block {
         fn evaluate(&self, _: &Request<'_>) -> Verdict {
