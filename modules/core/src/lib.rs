@@ -42,7 +42,6 @@ impl Default for ModuleRegistry {
     }
 }
 
-
 pub struct PolicyChain {
     policies: Vec<Box<dyn Policy>>,
 }
