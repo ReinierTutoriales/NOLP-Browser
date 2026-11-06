@@ -10,7 +10,10 @@ impl AntiAi {
     pub fn new(hosts: impl IntoIterator<Item = String>) -> Self {
         Self {
             enabled: true,
-            hosts: hosts.into_iter().filter_map(|h| normalized_dns_host(&h)).collect(),
+            hosts: hosts
+                .into_iter()
+                .filter_map(|h| normalized_dns_host(&h))
+                .collect(),
         }
     }
     pub fn set_enabled(&mut self, enabled: bool) {
