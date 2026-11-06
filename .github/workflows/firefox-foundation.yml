@@ -36,6 +36,8 @@ jobs:
           rev=data["firefox"]["revision"]
           assert re.fullmatch(r"[0-9a-f]{40}",rev), "Firefox revision must be immutable SHA"
           assert data["firefox"]["source"] == "https://github.com/mozilla-firefox/firefox"
+          assert data["firefox"]["version"] == "159.0.1"
+          assert data["firefox"]["release_tag"] == "FIREFOX_159_0_1_RELEASE"
           print("Manifest and shell syntax validated:",rev)
           PY
 
@@ -58,6 +60,10 @@ jobs:
         run: |
           REV=$(python3 -c 'import tomllib;print(tomllib.load(open("engine/upstream-manifest/firefox.toml","rb"))["firefox"]["revision"])')
           FIREFOX_REVISION="$REV" bash scripts/bootstrap-firefox.sh
+      - name: Verify pinned upstream version
+        run: |
+          test "$(cat .upstream/firefox/browser/config/version.txt)" = "159.0.1"
+          bash scripts/smoke-firefox.sh
       - name: Configure artifact build
         run: |
           cat > .upstream/firefox/mozconfig <<'EOF'
