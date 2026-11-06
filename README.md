@@ -1,12 +1,12 @@
 <div align="center">
 
-<img src="assets/brand/nolp-wordmark.svg" alt="NOLP — Nexo Óptimo Local y Privado" width="520" />
+<img src="assets/brand/nolp-wordmark.svg" alt="NOLP — Nex / Nexo · Óptima · Local · Privada" width="520" />
 
 </div>
 
 # NOLP
 
-**Nexo Óptimo Local y Privado**
+**Nex / Nexo · Óptima · Local · Privada**
 
 > Un navegador pensado para ofrecer rendimiento, autonomía y privacidad sin depender innecesariamente de servicios en la nube.
 
@@ -14,12 +14,12 @@
 
 ## ¿Qué significa NOLP?
 
-- **N — Nexo:** conexión y acceso a la web.
-- **O — Óptimo:** eficiencia, fluidez y uso responsable de recursos.
-- **L — Local:** datos y preferencias bajo control del usuario, prioritariamente en su dispositivo.
-- **P — Privado:** privacidad y seguridad integradas desde el diseño.
+- **N — Nex / Nexo:** conexión.
+- **O — Óptima:** rendimiento y eficiencia.
+- **L — Local:** tecnología *local-first*.
+- **P — Privada:** privacidad desde el diseño (*privacy-first*).
 
-NOLP también puede leerse como **Navegador Óptimo Local y Privado**.
+Esta es la interpretación oficial del acrónimo NOLP. No sustituirla por «Navegador Óptimo Local y Privado» ni por otras expansiones.
 
 ## Visión
 
@@ -88,4 +88,4 @@ El código propio de NOLP se distribuye bajo la **Mozilla Public License 2.0 (MP
 
 ---
 
-**NOLP — Nexo Óptimo Local y Privado.**
+**NOLP — Nex / Nexo · Óptima · Local · Privada.**
