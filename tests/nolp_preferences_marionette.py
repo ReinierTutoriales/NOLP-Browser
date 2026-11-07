@@ -27,7 +27,15 @@ def launch(profile):
 
 
 def picker(driver):
-    driver.get("about:preferences")
+    # WebDriver content navigation cannot open privileged about:preferences.
+    # Use the browser's trusted-tab API through Marionette chrome context.
+    driver.set_context("chrome")
+    try:
+        driver.execute_script(
+            "gBrowser.selectedTab = gBrowser.addTrustedTab('about:preferences');"
+        )
+    finally:
+        driver.set_context("content")
     WebDriverWait(driver, 30).until(
         lambda d: d.execute_script("return !!document.getElementById('nolp-theme-select')")
     )
