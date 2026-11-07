@@ -6,12 +6,16 @@
 
 ## Significado oficial del nombre
 
-- **N — Nextt:** siguiente generación (*next-generation*).
-- **O — Óptima:** rendimiento y eficiencia.
+- **N — Nex:** siguiente generación (*next-generation*).
+- **O — Óptimo:** rendimiento y eficiencia.
 - **L — Local:** tecnología *local-first*.
-- **P — Privada:** *privacy-first*.
+- **P — Privado:** *privacy-first*.
 
 Esta definición es la referencia oficial para el nombre NOLP en documentación, interfaz y publicaciones. No usar expansiones alternativas del acrónimo.
+
+## Fuente oficial de identidad
+
+El logotipo PNG oficial proporcionado por el propietario se conserva en `assets/brand/nolp-official.png` y es la referencia para los iconos nativos generados. Los SVG son recursos auxiliares y no sustituyen automáticamente ese original. No alterar proporciones ni redibujar el símbolo durante la exportación.
 
 ## Concepto
 Monograma «N» como cinta continua, que representa conexión y autonomía. Arco abierto como metáfora de navegación sin encierro. Diseño sin dependencia de fuentes externas ni imágenes remotas.

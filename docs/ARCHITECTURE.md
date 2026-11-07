@@ -8,7 +8,7 @@
 - iOS/iPadOS: sujeto a restricciones técnicas y regulatorias de distribución; no prometer compatibilidad Gecko.
 
 ## Sistema visual
-La UI NOLP tendrá dos temas exclusivamente: **Aero Light** y **Aero Dark**, con cristal translúcido y fallback opaco accesible. Contratos y criterios en `docs/UI-DESIGN-SYSTEM.md`. La transparencia se limita al chrome UI y se optimiza por plataforma.
+La UI NOLP tendrá exclusivamente dos temas: **claro** y **oscuro**, con selección automática según el sistema y preferencia manual. **Aero, Acrylic personalizado, cristal translúcido y desenfoque propio están descartados.** Se utilizan superficies opacas y controles soportados por Firefox y el sistema operativo. No se introduce un compositor adicional. Criterios en `docs/UI-DESIGN-SYSTEM.md`.
 
 ## Capas
 1. Aplicaciones: UI escritorio, táctil y TV, con accesibilidad y controles nativos.
