@@ -59,7 +59,7 @@ def install(root: Path, check: bool = False) -> None:
     if bounds is None:
         raise ValueError("Official NOLP logo has no visible pixels")
     image = image.crop(bounds)
-    icons = list(target.rglob("*.png"))
+    # Only application icons: do not overwrite private browsing, installer art,\n    # tile backgrounds, or unrelated PNG resources.\n    icons = sorted(target.glob("default[0-9]*.png"))
     if not icons:
         raise ValueError("No PNG assets in Firefox unofficial branding")
     for path in icons:
@@ -81,6 +81,10 @@ def install(root: Path, check: bool = False) -> None:
                     raise ValueError(f"Incorrect NOLP artwork in {path}")
         else:
             output.save(path, optimize=True)
+    # Firefox also packages native ICO/ICNS assets. Do not silently ship
+    # Mozilla icons under the NOLP name: require dedicated conversion before
+    # treating Windows/macOS branding as complete.
+    print("Note: Windows ICO and macOS ICNS branding still require platform assets")
     print(f"NOLP branding {'verified' if check else 'installed'}: {target}")
 
 
