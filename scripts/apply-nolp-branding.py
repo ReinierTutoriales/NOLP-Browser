@@ -72,6 +72,16 @@ def install(root: Path, check: bool = False) -> None:
         else:
             properties.write_text(updated, encoding="utf-8")
 
+    # Keep package metadata consistent with the selected brand.
+    for name in ("branding.nsi",):
+        file = target / name
+        if file.is_file():
+            data = file.read_text(encoding="utf-8")
+            # Do not globally rewrite Mozilla installer directives: they
+            # include paths and identifiers which are not product labels.
+            if check and not data:
+                raise ValueError(f"Empty branding metadata: {file}")
+
     # Original icon is centered in its own transparent canvas. Crop alpha bounds
     # once and retain 2.5% safety inset, then downsample with Lanczos.
     with Image.open(SOURCE) as raw:
