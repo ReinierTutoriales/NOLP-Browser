@@ -4,8 +4,11 @@ import { getNolpTheme, setNolpTheme } from "chrome://browser/content/preferences
 
 const select = document.getElementById("nolp-theme-select");
 if (select) {
+  let generation = 0;
   const refresh = async () => {
+    const current = ++generation;
     const active = await getNolpTheme(AddonManager);
+    if (current !== generation || !select.isConnected) return;
     if (active) {
       select.value = active;
     } else {
@@ -14,6 +17,7 @@ if (select) {
     }
   };
 
+  let changing = false;
   const listener = {
     onEnabled(addon) {
       if (addon.type === "theme") void refresh();
@@ -26,6 +30,8 @@ if (select) {
   window.addEventListener("pagehide", () => AddonManager.removeAddonListener(listener), { once: true });
 
   select.addEventListener("change", async () => {
+    if (changing) return;
+    changing = true;
     const value = select.value;
     select.disabled = true;
     try {
@@ -35,6 +41,7 @@ if (select) {
     } finally {
       await refresh();
       select.disabled = false;
+      changing = false;
     }
   });
   await refresh();
