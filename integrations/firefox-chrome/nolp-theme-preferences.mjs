@@ -3,6 +3,11 @@ import { AddonManager } from "resource://gre/modules/AddonManager.sys.mjs";
 import { getNolpTheme, setNolpTheme } from "chrome://browser/content/preferences/nolp/NolpThemeSelector.sys.mjs";
 
 window.__nolpThemeDiagnostics = { loaded: true, attached: false, error: null };
+// Firefox preferences modules can execute before the preference pane is attached.
+// Wait for DOM readiness instead of silently skipping the selector.
+if (document.readyState === "loading") {
+  await new Promise(resolve => document.addEventListener("DOMContentLoaded", resolve, { once: true }));
+}
 const select = document.getElementById("nolp-theme-select");
 if (select) {
   window.__nolpThemeDiagnostics.attached = true;
