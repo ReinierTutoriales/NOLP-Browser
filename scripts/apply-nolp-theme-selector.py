@@ -50,6 +50,11 @@ def apply(root: Path, check: bool = False) -> None:
             raise ValueError("NOLP theme picker not installed")
         if any(not (dest / name).is_file() for name in RESOURCES):
             raise ValueError("NOLP theme picker resource missing")
+        for name in RESOURCES:
+            if (dest / name).read_bytes() != (SOURCE / name).read_bytes():
+                raise ValueError(f"NOLP theme picker resource differs: {name}")
+        if (dest / "nolp-official.png").read_bytes() != OFFICIAL_LOGO.read_bytes():
+            raise ValueError("NOLP official logo differs")
         return
     if STYLE not in page:
         page = page.replace(SCRIPT_ANCHOR, STYLE + "\n  " + SCRIPT_ANCHOR, 1)
