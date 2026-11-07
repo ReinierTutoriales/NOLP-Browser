@@ -12,7 +12,7 @@ LOGO_ENTRY = "   content/browser/preferences/nolp/nolp-official.png (nolp/nolp-o
 PREFS = Path("browser/components/preferences/preferences.xhtml")
 JAR = Path("browser/components/preferences/jar.mn")
 SCRIPT_ANCHOR = '<script src="chrome://browser/content/preferences/preferences.js"/>'
-SCRIPT = '<script type="module" src="chrome://browser/content/preferences/nolp/nolp-theme-preferences.mjs"></script>'
+SCRIPT = '<script src="chrome://browser/content/preferences/nolp/nolp-theme-preferences.js"></script>'
 BODY_ANCHOR = '<vbox id="mainPrefPane">'
 CONTROL = '''<html:div id="nolp-theme-preferences" role="group" aria-label="NOLP appearance">
           <html:div id="nolp-brand-mark">
@@ -26,7 +26,7 @@ CONTROL = '''<html:div id="nolp-theme-preferences" role="group" aria-label="NOLP
           </html:select>
         </html:div>'''
 JAR_ANCHOR = "   content/browser/preferences/preferences.js"
-RESOURCES = ("NolpThemeSelector.sys.mjs", "nolp-theme-preferences.mjs", "nolp-brand-preferences.css")
+RESOURCES = ("NolpThemeSelector.sys.mjs", "nolp-theme-preferences.js", "nolp-brand-preferences.css")
 
 
 def apply(root: Path, check: bool = False) -> None:
