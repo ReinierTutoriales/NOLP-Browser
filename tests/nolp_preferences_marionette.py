@@ -105,9 +105,19 @@ def select(driver, mode):
     )
     # Theme activation is asynchronous: the select's value changes before
     # AddonManager finishes enabling the built-in theme.
-    WebDriverWait(driver, 30).until(
-        lambda d: active_theme_state(d, mode) == {"active": True, "type": "theme"}
-    )
+    try:
+        WebDriverWait(driver, 30).until(
+            lambda d: active_theme_state(d, mode) == {"active": True, "type": "theme"}
+        )
+    except Exception:
+        state = active_theme_state(driver, mode)
+        ui = driver.execute_script(
+            "const s=document.getElementById('nolp-theme-select');"
+            "return {value:s?.value, disabled:s?.disabled, url:location.href}"
+        )
+        raise AssertionError(
+            f"Theme {mode} activation failed: AddonManager={state!r}, UI={ui!r}"
+        ) from None
     driver.refresh()
     WebDriverWait(driver, 30).until(
         lambda d: d.execute_script(
