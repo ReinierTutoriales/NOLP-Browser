@@ -1,0 +1,32 @@
+/* Native NOLP brand panel: proportional logo, no image distortion. */
+#nolp-theme-preferences {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  padding-block: 16px;
+}
+#nolp-brand-mark {
+  display: grid;
+  place-items: center;
+  width: min(100%, 192px);
+  aspect-ratio: 1;
+  overflow: hidden;
+}
+#nolp-brand-mark img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+#nolp-theme-preferences label {
+  text-align: center;
+  font-weight: 600;
+}
+#nolp-theme-select {
+  max-width: 100%;
+  min-width: min(100%, 220px);
+}
