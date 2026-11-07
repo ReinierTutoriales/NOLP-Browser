@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       build_firefox:
-        description: 'Run resource-intensive Firefox artifact build'
+        description: 'Build Firefox UI with Mozilla artifact mode'
         type: boolean
         required: true
         default: false
@@ -28,6 +28,9 @@ jobs:
           bash -n scripts/run-nolp-desktop.sh
           python3 -m unittest discover -s tests -p 'test_desktop_launcher.py' -v
           python3 -m unittest discover -s tests -p 'test_firefox_chrome_overlay.py' -v
+          python3 -m unittest discover -s tests -p 'test_nolp_theme_selector.py' -v
+          python3 -m unittest discover -s tests -p 'test_nolp_branding.py' -v
+          node tests/nolp-theme-runtime.mjs
           python3 - <<'PY'
           import pathlib, re, tomllib
           data=tomllib.loads(pathlib.Path("engine/upstream-manifest/firefox.toml").read_text())
@@ -39,11 +42,11 @@ jobs:
           print("Manifest and shell syntax validated:",rev)
           PY
 
-  artifact-build:
+  ui-artifact-build:
     if: github.event_name == 'workflow_dispatch' && inputs.build_firefox
     needs: validate
     runs-on: ubuntu-24.04
-    timeout-minutes: 180
+    timeout-minutes: 90
     permissions:
       contents: read
     steps:
@@ -66,17 +69,27 @@ jobs:
         run: |
           python3 scripts/apply-firefox-chrome.py --firefox-dir .upstream/firefox
           python3 scripts/apply-firefox-chrome.py --firefox-dir .upstream/firefox --check
-      - name: Configure artifact build
+      - name: Apply and verify native NOLP theme picker
+        run: |
+          python3 scripts/apply-nolp-theme-selector.py --firefox-dir .upstream/firefox
+          python3 scripts/apply-nolp-theme-selector.py --firefox-dir .upstream/firefox --check
+      - name: Install NOLP native application branding
+        run: |
+          python3 -m pip install --break-system-packages "Pillow>=11,<13"
+          python3 scripts/apply-nolp-branding.py --firefox-dir .upstream/firefox
+          python3 scripts/apply-nolp-branding.py --firefox-dir .upstream/firefox --check
+      - name: Configure Mozilla UI artifact build
         run: |
           cat > .upstream/firefox/mozconfig <<'EOF'
           ac_add_options --enable-artifact-builds
+          ac_add_options --with-branding=browser/branding/nolp
           ac_add_options --disable-debug
           mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj-nolp
           EOF
-      - name: Bootstrap build dependencies
+      - name: Bootstrap Mozilla artifact build dependencies
         working-directory: .upstream/firefox
         run: ./mach bootstrap --application-choice browser_artifact_mode
-      - name: Build Firefox upstream artifact
+      - name: Build patched Firefox UI resources
         working-directory: .upstream/firefox
         run: ./mach build
       - name: Smoke test built Firefox executable
@@ -89,6 +102,45 @@ jobs:
       - name: Render local HTML in isolated Gecko profile
         working-directory: .
         run: bash scripts/smoke-gecko-navigation.sh
+      - name: Capture NOLP preferences UI in Gecko
+        working-directory: .upstream/firefox
+        env:
+          MOZ_HEADLESS: '1'
+        run: |
+          mkdir -p ../../ui-validation
+          PROFILE="$(mktemp -d)"
+          trap 'rm -rf "$PROFILE"' EXIT
+          timeout 90s ./mach run --headless --no-remote --profile "$PROFILE" \
+            --window-size 1280,900 --screenshot "$GITHUB_WORKSPACE/ui-validation/preferences.png" \
+            'about:preferences'
+          python3 - <<'PY'
+          import pathlib, struct
+          image = pathlib.Path("../../ui-validation/preferences.png").read_bytes()
+          assert image[:8] == bytes((137, 80, 78, 71, 13, 10, 26, 10)), "Preferences screenshot missing or invalid"
+          width, height = struct.unpack(">II", image[16:24])
+          assert width >= 800 and height >= 600, (width, height)
+          print(f"Preferences screenshot captured: {width}x{height}")
+          PY
+      - name: Verify real NOLP theme selection and restart persistence
+        run: |
+          python3 -m venv .venv-nolp-ui
+          .venv-nolp-ui/bin/pip install 'selenium==4.38.0'
+          curl --fail --location --retry 3 \
+            'https://github.com/mozilla/geckodriver/releases/download/v0.36.0/geckodriver-v0.36.0-linux64.tar.gz' \
+            -o /tmp/nolp-geckodriver.tar.gz
+          mkdir -p .tools/geckodriver
+          tar -xzf /tmp/nolp-geckodriver.tar.gz -C .tools/geckodriver
+          NOLP_FIREFOX_BINARY="$GITHUB_WORKSPACE/.upstream/firefox/obj-nolp/dist/bin/firefox" \
+          NOLP_GECKODRIVER="$GITHUB_WORKSPACE/.tools/geckodriver/geckodriver" \
+          NOLP_UI_ARTIFACTS="$GITHUB_WORKSPACE/ui-validation" \
+            .venv-nolp-ui/bin/python tests/nolp_preferences_marionette.py
+      - name: Upload NOLP preferences screenshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nolp-preferences-screenshot
+          path: ui-validation/*.png
+          if-no-files-found: ignore
       - name: Preserve failure diagnostics
         if: failure()
         run: |
@@ -107,4 +159,4 @@ jobs:
         if: always()
         run: |
           git -C .upstream/firefox rev-parse HEAD || true
-          echo "This is an upstream Firefox artifact build, not a branded NOLP release."
+          echo "This is Mozilla artifact-mode UI validation, not a full Gecko compilation or signed NOLP release."

@@ -34,8 +34,8 @@ No prometer paridad exacta de materiales, API, rendimiento ni soporte sin prueba
 6. Evitar `Arc<Mutex<...>>` como arquitectura universal: minimizar estado mutable, bloquear brevemente y medir contención. Evitar procesos adicionales sin amenaza o beneficio medido.
 7. No convertir el núcleo Rust en un singleton privilegiado: permisos mínimos y acceso segmentado por capacidad.
 
-## Aero multiplataforma
-Seguir `docs/UI-DESIGN-SYSTEM.md`: solo Aero Light y Aero Dark, geometría de 2–4 px, vidrio predominante, Acrylic puntual, chrome UI separado del contenido web, fallback opaco. Tokens semánticos versionados compartidos; cada plataforma aplica su compositor nativo y ajustes de accesibilidad. No usar blur de página completa ni repintar todo por eventos locales.
+## Temas nativos multiplataforma
+Seguir `docs/UI-DESIGN-SYSTEM.md`: únicamente temas claro y oscuro, geometría compacta, superficies opacas, chrome UI separado del contenido web y preferencias de accesibilidad del sistema. Aero, Acrylic y efectos de desenfoque personalizados están descartados. Compartir tokens semánticos versionados; cada plataforma usa controles estables sin compositor adicional.
 
 ## Calidad y medición
 - Contratos: pruebas unitarias, compatibilidad semántica, casos de error, cancelación, eventos fuera de orden y recuperación.
@@ -50,7 +50,7 @@ Seguir `docs/UI-DESIGN-SYSTEM.md`: solo Aero Light y Aero Dark, geometría de 2�
 3. Prototipar un recorrido real pestaña → comando → core → adaptador Gecko → evento → UI desktop.
 4. Medir overhead, threading y aislamiento; no adoptar IPC adicional sin justificación.
 5. Prototipar Android/TV con GeckoView y adaptadores Kotlin; evaluar UniFFI con mediciones.
-6. Introducir tokens Aero compartidos y componentes por plataforma; probar accesibilidad y vídeo.
+6. Introducir tokens semánticos claro/oscuro compartidos y componentes por plataforma; probar accesibilidad y vídeo.
 7. Extender módulos y CI con pruebas de consumidores, compatibilidad y regresiones.
 
 ## Referencias primarias

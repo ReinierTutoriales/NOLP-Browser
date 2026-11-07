@@ -181,7 +181,7 @@ Sin ejecución real, marcar **pendiente/no verificado**. No usar el estado del r
 
 ## Prototipo modular Rust publicado (2026-11-06)
 - Existe un workspace Cargo **independiente de Firefox**, con 15 crates de módulos y un crate de pruebas de composición (`integration`).
-- Los módulos declaran solo `nolp-contracts` como dependencia directa; `nolp-core` compone políticas mediante traits. El crate `integration` conecta en pruebas `network-policy`, `content-blocker`, `anti-ai`, `core`, `engine-gecko` y `ui-aero`.
+- Los módulos declaran solo `nolp-contracts` como dependencia directa; `nolp-core` compone políticas mediante traits. El crate `integration` conecta en pruebas `network-policy`, `content-blocker`, `anti-ai`, `core`, `engine-gecko` y `ui-theme`.
 - `modules/manifest.json` registra todos los módulos como `scaffold` (API 0.1.0); esto **no significa** integración Gecko ni funcionalidades de navegador completas.
 - Implementación parcial: contratos tipados, políticas de host exacto, control anti-IA reversible en memoria, estado local de consentimiento y tema. Son prototipos sin persistencia ni tráfico real.
 - Adaptadores Gecko, escritorio, Android, vault, medios y actualizaciones exponen estados no disponibles; no hay integración con APIs Mozilla, FFI, IPC, UI renderizada ni sandbox propio.
