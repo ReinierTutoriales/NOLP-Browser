@@ -75,7 +75,8 @@ def select(driver, mode):
             "return s && !s.disabled && s.value === arguments[0]", mode
         )
     )
-    # Verify the real theme in privileged chrome, not only the select element.\n    assert_active_theme(driver, mode)
+    # Verify the real theme in privileged chrome, not only the select element.
+    assert_active_theme(driver, mode)
     driver.refresh()
     WebDriverWait(driver, 30).until(
         lambda d: d.execute_script(
@@ -102,7 +103,8 @@ with tempfile.TemporaryDirectory(prefix="nolp-marionette-") as tmp:
     driver = launch(profile)
     try:
         actual = picker(driver)
-        assert actual == "auto", f"Theme lost after restart: {actual!r}"\n        assert_active_theme(driver, "auto")
+        assert actual == "auto", f"Theme lost after restart: {actual!r}"
+        assert_active_theme(driver, "auto")
         print("PASS: NOLP auto theme persisted after Firefox restart", flush=True)
     finally:
         driver.quit()
