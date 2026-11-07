@@ -28,6 +28,13 @@ class ThemeSelectorTests(unittest.TestCase):
         selector.apply(self.root)
         self.assertEqual(before, (self.root / selector.PREFS).read_bytes())
         self.assertEqual((self.root / selector.JAR).read_text().count(selector.JAR_ANCHOR), 1)
+        manifest = (self.root / selector.JAR).read_text()
+        for name in selector.RESOURCES:
+            self.assertIn(
+                f"content/browser/preferences/nolp/{name} (nolp/{name})",
+                manifest,
+            )
+            self.assertTrue((self.root / selector.JAR).parent.joinpath("nolp", name).is_file())
 
     def test_auto_is_native_default_theme(self):
         controller = (selector.SOURCE / "NolpThemeSelector.sys.mjs").read_text()
