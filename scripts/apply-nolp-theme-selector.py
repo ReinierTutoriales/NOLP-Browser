@@ -54,7 +54,7 @@ def apply(root: Path, check: bool = False) -> None:
         if entry not in manifest:
             manifest = manifest.replace(JAR_ANCHOR, JAR_ANCHOR + "\n" + entry, 1)
     if LOGO_ENTRY not in manifest:
-        manifest = manifest.replace(JAR_ANCHOR, JAR_ANCHOR + "\\n" + LOGO_ENTRY, 1)
+        manifest = manifest.replace(JAR_ANCHOR, JAR_ANCHOR + "\n" + LOGO_ENTRY, 1)
     prefs.write_text(page)
     jar.write_text(manifest)
     dest.mkdir(exist_ok=True)
