@@ -43,7 +43,7 @@ jobs:
           PY
 
   ui-artifact-build:
-    if: (github.event_name == 'workflow_dispatch' && inputs.build_firefox) || (github.event_name == 'push' && github.ref == 'refs/heads/feat/nolp-native-theme-selector')
+    if: (github.event_name == 'workflow_dispatch' && inputs.build_firefox) || (github.event_name == 'push' && github.ref == 'refs/heads/feat/nolp-native-theme-selector') || (github.event_name == 'pull_request' && github.head_ref == 'feat/nolp-native-theme-selector')
     needs: validate
     runs-on: ubuntu-24.04
     timeout-minutes: 90
