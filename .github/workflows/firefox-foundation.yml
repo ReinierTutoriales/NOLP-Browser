@@ -1,7 +1,7 @@
 name: Firefox foundation
 on:
   push:
-    branches: [main]
+    branches: [main, feat/nolp-native-theme-selector]
   pull_request:
   workflow_dispatch:
     inputs:
@@ -43,7 +43,7 @@ jobs:
           PY
 
   ui-artifact-build:
-    if: github.event_name == 'workflow_dispatch' && inputs.build_firefox
+    if: (github.event_name == 'workflow_dispatch' && inputs.build_firefox) || (github.event_name == 'push' && github.ref == 'refs/heads/feat/nolp-native-theme-selector')
     needs: validate
     runs-on: ubuntu-24.04
     timeout-minutes: 90
