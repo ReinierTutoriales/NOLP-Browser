@@ -23,7 +23,8 @@ def launch(profile):
     options.add_argument(str(profile))
     options.set_preference("browser.shell.checkDefaultBrowser", False)
     options.set_preference("datareporting.policy.dataSubmissionEnabled", False)
-    return webdriver.Firefox(service=Service(str(GECKODRIVER)), options=options)
+    service = Service(str(GECKODRIVER), env={**os.environ, "MOZ_REMOTE_ALLOW_SYSTEM_ACCESS": "1"})
+    return webdriver.Firefox(service=service, options=options)
 
 
 def picker(driver):
