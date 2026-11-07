@@ -114,12 +114,25 @@ jobs:
           assert width >= 800 and height >= 600, (width, height)
           print(f"Preferences screenshot captured: {width}x{height}")
           PY
+      - name: Verify real NOLP theme selection and restart persistence
+        run: |
+          python3 -m venv .venv-nolp-ui
+          .venv-nolp-ui/bin/pip install 'selenium==4.38.0'
+          curl --fail --location --retry 3 \
+            'https://github.com/mozilla/geckodriver/releases/download/v0.36.0/geckodriver-v0.36.0-linux64.tar.gz' \
+            -o /tmp/nolp-geckodriver.tar.gz
+          mkdir -p .tools/geckodriver
+          tar -xzf /tmp/nolp-geckodriver.tar.gz -C .tools/geckodriver
+          NOLP_FIREFOX_BINARY="$GITHUB_WORKSPACE/.upstream/firefox/obj-nolp/dist/bin/firefox" \
+          NOLP_GECKODRIVER="$GITHUB_WORKSPACE/.tools/geckodriver/geckodriver" \
+          NOLP_UI_ARTIFACTS="$GITHUB_WORKSPACE/ui-validation" \
+            .venv-nolp-ui/bin/python tests/nolp_preferences_marionette.py
       - name: Upload NOLP preferences screenshot
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: nolp-preferences-screenshot
-          path: ui-validation/preferences.png
+          path: ui-validation/*.png
           if-no-files-found: ignore
       - name: Preserve failure diagnostics
         if: failure()
