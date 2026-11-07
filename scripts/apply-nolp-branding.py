@@ -112,7 +112,11 @@ def install(root: Path, check: bool = False) -> None:
         if dest.is_file():
             from io import BytesIO
             buffer = BytesIO()
-            image.save(buffer, format="ICO", sizes=[(n, n) for n in (16, 24, 32, 48, 64, 128, 256)])
+            canvas = Image.new("RGBA", (256, 256))
+            fitted = image.copy()
+            fitted.thumbnail((244, 244), Image.Resampling.LANCZOS)
+            canvas.alpha_composite(fitted, ((256 - fitted.width) // 2, (256 - fitted.height) // 2))
+            canvas.save(buffer, format="ICO", sizes=[(n, n) for n in (16, 24, 32, 48, 64, 128, 256)])
             payload = buffer.getvalue()
             if check:
                 if dest.read_bytes() != payload:
