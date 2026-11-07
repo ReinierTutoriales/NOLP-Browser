@@ -51,6 +51,27 @@ def install(root: Path, check: bool = False) -> None:
         else:
             path.write_text(data, encoding="utf-8")
 
+    # Firefox's application display name is configured separately from Fluent.
+    config = target / "configure.sh"
+    configuration = config.read_text(encoding="utf-8")
+    configuration = re.sub(r"(?m)^MOZ_APP_DISPLAYNAME=.*$", "MOZ_APP_DISPLAYNAME=NOLP", configuration)
+    configuration = re.sub(r"(?m)^MOZ_MACBUNDLE_ID=.*$", "MOZ_MACBUNDLE_ID=org.nolp.browser", configuration)
+    if check:
+        if config.read_text(encoding="utf-8") != configuration:
+            raise ValueError("NOLP application display name or bundle ID incorrect")
+    else:
+        config.write_text(configuration, encoding="utf-8")
+
+    properties = target / "locales/en-US/brand.properties"
+    if properties.is_file():
+        old = properties.read_text(encoding="utf-8")
+        updated = old.replace("Nightly", "NOLP").replace("Firefox", "NOLP")
+        if check:
+            if old != updated:
+                raise ValueError("NOLP legacy brand.properties not installed")
+        else:
+            properties.write_text(updated, encoding="utf-8")
+
     # Original icon is centered in its own transparent canvas. Crop alpha bounds
     # once and retain 2.5% safety inset, then downsample with Lanczos.
     with Image.open(SOURCE) as raw:
@@ -84,7 +105,35 @@ def install(root: Path, check: bool = False) -> None:
     # Firefox also packages native ICO/ICNS assets. Do not silently ship
     # Mozilla icons under the NOLP name: require dedicated conversion before
     # treating Windows/macOS branding as complete.
-    print("Note: Windows ICO and macOS ICNS branding still require platform assets")
+    # Windows executable icon and macOS application icon, using the same
+    # official source. Other icon roles retain their original specialized art.
+    for name in ("firefox.ico", "firefox64.ico"):
+        dest = target / name
+        if dest.is_file():
+            from io import BytesIO
+            buffer = BytesIO()
+            image.save(buffer, format="ICO", sizes=[(n, n) for n in (16, 24, 32, 48, 64, 128, 256)])
+            payload = buffer.getvalue()
+            if check:
+                if dest.read_bytes() != payload:
+                    raise ValueError(f"NOLP Windows icon not installed: {name}")
+            else:
+                dest.write_bytes(payload)
+    mac = target / "firefox.icns"
+    if mac.is_file():
+        from io import BytesIO
+        buffer = BytesIO()
+        icon = Image.new("RGBA", (1024, 1024))
+        fitted = image.copy()
+        fitted.thumbnail((972, 972), Image.Resampling.LANCZOS)
+        icon.alpha_composite(fitted, ((1024 - fitted.width) // 2, (1024 - fitted.height) // 2))
+        icon.save(buffer, format="ICNS")
+        if check:
+            if mac.read_bytes() != buffer.getvalue():
+                raise ValueError("NOLP macOS icon not installed")
+        else:
+            mac.write_bytes(buffer.getvalue())
+    print("Note: macOS Assets.car and specialized document/private icons remain upstream")
     print(f"NOLP branding {'verified' if check else 'installed'}: {target}")
 
 
