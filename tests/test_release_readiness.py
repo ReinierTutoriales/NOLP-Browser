@@ -17,10 +17,11 @@ def run(name, status="completed", conclusion="success", run_id=1):
 
 class ReleaseReadinessTests(unittest.TestCase):
     def test_pr_uses_head_sha_not_synthetic_merge_sha(self):
-        with tempfile.NamedTemporaryFile(mode="w+", encoding="utf-8") as handle:
-            json.dump({"pull_request": {"head": {"sha": "pr-head-sha"}}}, handle)
-            handle.flush()
-            self.assertEqual(gate.target_sha("pull_request", "synthetic-merge-sha", handle.name), "pr-head-sha")
+        # NamedTemporaryFile cannot be reopened by name on Windows while still open.
+        with tempfile.TemporaryDirectory() as directory:
+            event_path = Path(directory) / "event.json"
+            event_path.write_text(json.dumps({"pull_request": {"head": {"sha": "pr-head-sha"}}}), encoding="utf-8")
+            self.assertEqual(gate.target_sha("pull_request", "synthetic-merge-sha", str(event_path)), "pr-head-sha")
 
     def test_pr_only_accepts_matching_pr_run(self):
         self.assertTrue(gate.eligible_run({"head_sha": "abc", "event": "pull_request"}, "abc", "pull_request"))
