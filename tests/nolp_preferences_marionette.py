@@ -3,7 +3,6 @@
 import os
 from pathlib import Path
 import tempfile
-import time
 
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
@@ -35,6 +34,34 @@ def picker(driver):
     return driver.execute_script("return document.getElementById('nolp-theme-select').value")
 
 
+THEME_IDS = {
+    "auto": "default-theme@mozilla.org",
+    "light": "firefox-compact-light@mozilla.org",
+    "dark": "firefox-compact-dark@mozilla.org",
+}
+
+
+def assert_active_theme(driver, mode):
+    """Check the active add-on through Firefox's privileged AddonManager."""
+    driver.set_context("chrome")
+    try:
+        active = driver.execute_async_script("""
+            const done = arguments[arguments.length - 1];
+            (async () => {
+              const { AddonManager } = ChromeUtils.importESModule(
+                "resource://gre/modules/AddonManager.sys.mjs"
+              );
+              const addon = await AddonManager.getAddonByID(arguments[0]);
+              done({ active: addon?.isActive ?? false, type: addon?.type ?? null });
+            })().catch(error => done({ error: String(error) }));
+        """, THEME_IDS[mode])
+    finally:
+        driver.set_context("content")
+    assert active == {"active": True, "type": "theme"}, (
+        f"Theme {mode} is not active in AddonManager: {active!r}"
+    )
+
+
 def select(driver, mode):
     driver.execute_script("""
         const select = document.getElementById('nolp-theme-select');
@@ -48,14 +75,14 @@ def select(driver, mode):
             "return s && !s.disabled && s.value === arguments[0]", mode
         )
     )
-    # Confirm the actual active built-in theme via Firefox privileged about:addons UI,
-    # not merely the select value. A reload must read it back from AddonManager.
+    # Verify the real theme in privileged chrome, not only the select element.\n    assert_active_theme(driver, mode)
     driver.refresh()
     WebDriverWait(driver, 30).until(
         lambda d: d.execute_script(
             "return document.getElementById('nolp-theme-select')?.value === arguments[0]", mode
         )
     )
+    assert_active_theme(driver, mode)
 
 
 with tempfile.TemporaryDirectory(prefix="nolp-marionette-") as tmp:
@@ -75,7 +102,7 @@ with tempfile.TemporaryDirectory(prefix="nolp-marionette-") as tmp:
     driver = launch(profile)
     try:
         actual = picker(driver)
-        assert actual == "auto", f"Theme lost after restart: {actual!r}"
+        assert actual == "auto", f"Theme lost after restart: {actual!r}"\n        assert_active_theme(driver, "auto")
         print("PASS: NOLP auto theme persisted after Firefox restart", flush=True)
     finally:
         driver.quit()
