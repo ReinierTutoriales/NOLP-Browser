@@ -41,6 +41,9 @@ def apply(root: Path, check: bool = False) -> None:
     if not OFFICIAL_LOGO.is_file():
         raise ValueError("Official NOLP logo missing")
     for name in RESOURCES:
+        if not (SOURCE / name).is_file():
+            raise ValueError(f"NOLP source resource missing: {name}")
+    for name in RESOURCES:
         if (dest / name).exists() and (dest / name).read_bytes() != (SOURCE / name).read_bytes():
             raise ValueError("Existing NOLP resource differs")
     if check:
@@ -69,9 +72,9 @@ def apply(root: Path, check: bool = False) -> None:
         manifest = manifest.replace(JAR_ANCHOR, JAR_ANCHOR + "\n" + STYLE_ENTRY, 1)
     if LOGO_ENTRY not in manifest:
         manifest = manifest.replace(JAR_ANCHOR, JAR_ANCHOR + "\n" + LOGO_ENTRY, 1)
+    dest.mkdir(exist_ok=True)
     prefs.write_text(page)
     jar.write_text(manifest)
-    dest.mkdir(exist_ok=True)
     (dest / "nolp-official.png").write_bytes(OFFICIAL_LOGO.read_bytes())
     for name in RESOURCES:
         (dest / name).write_bytes((SOURCE / name).read_bytes())
