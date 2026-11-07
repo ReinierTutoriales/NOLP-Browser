@@ -29,6 +29,7 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_desktop_launcher.py' -v
           python3 -m unittest discover -s tests -p 'test_firefox_chrome_overlay.py' -v
           python3 -m unittest discover -s tests -p 'test_nolp_theme_selector.py' -v
+          python3 -m unittest discover -s tests -p 'test_nolp_branding.py' -v
           node tests/nolp-theme-runtime.mjs
           python3 - <<'PY'
           import pathlib, re, tomllib
