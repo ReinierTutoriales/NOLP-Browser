@@ -8,7 +8,7 @@ if (select) {
   const refresh = async () => {
     const current = ++generation;
     const active = await getNolpTheme(AddonManager);
-    if (current !== generation || !select.isConnected) return;
+    if (disposed || current !== generation || !select.isConnected) return;
     if (active) {
       select.value = active;
     } else {
@@ -18,6 +18,7 @@ if (select) {
   };
 
   let changing = false;
+  let disposed = false;
   const listener = {
     onEnabled(addon) {
       if (addon.type === "theme") void refresh();
@@ -27,10 +28,14 @@ if (select) {
     },
   };
   AddonManager.addAddonListener(listener);
-  window.addEventListener("pagehide", () => AddonManager.removeAddonListener(listener), { once: true });
+  window.addEventListener("pagehide", () => {
+    disposed = true;
+    generation++;
+    AddonManager.removeAddonListener(listener);
+  }, { once: true });
 
   select.addEventListener("change", async () => {
-    if (changing) return;
+    if (changing || disposed) return;
     changing = true;
     const value = select.value;
     select.disabled = true;
@@ -39,9 +44,14 @@ if (select) {
     } catch (error) {
       console.error("NOLP theme selection failed", error);
     } finally {
-      await refresh();
-      select.disabled = false;
-      changing = false;
+      try {
+        await refresh();
+      } catch (error) {
+        console.error("NOLP theme state refresh failed", error);
+      } finally {
+        changing = false;
+        if (!disposed && select.isConnected) select.disabled = false;
+      }
     }
   });
   await refresh();
