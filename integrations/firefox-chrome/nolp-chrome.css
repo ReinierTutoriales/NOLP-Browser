@@ -1,20 +1,18 @@
-/* NOLP Chrome UI theme: reuse Firefox's native light/dark color scheme.
- * No web-content selectors, backdrop filters or additional UI renderer.
- * Opt-in preference: nolp.theme.enabled (disabled by default until validated).
+/* NOLP native browser chrome. Firefox owns OS light/dark resolution.
+ * No web-content selectors, custom compositing, or background polling.
+ * Keep forced-colors under operating-system control.
  */
-@media -moz-pref("nolp.theme.enabled") {
-  @media not (forced-colors) {
-    :root {
-      --nolp-chrome-bg: light-dark(#f1f3f8, #181b23);
-      --nolp-chrome-fg: light-dark(#202431, #f4f5fa);
-      --nolp-chrome-edge: light-dark(#b8becd, #454b60);
-      --nolp-accent: light-dark(#6742bb, #a48aff);
-      --toolbar-bgcolor: var(--nolp-chrome-bg);
-      --toolbar-color: var(--nolp-chrome-fg);
-      --lwt-accent-color: var(--nolp-chrome-bg);
-      --lwt-text-color: var(--nolp-chrome-fg);
-      --toolbar-field-border-color: var(--nolp-chrome-edge);
-      --focus-outline-color: var(--nolp-accent);
-    }
+@media not (forced-colors) {
+  :root {
+    --nolp-chrome-bg: light-dark(#f2f4f8, #171b23);
+    --nolp-chrome-fg: light-dark(#1c2431, #f2f5fa);
+    --nolp-chrome-edge: light-dark(#b7c0d0, #434c5d);
+    --nolp-accent: light-dark(#4967a8, #91b5f4);
+    --toolbar-bgcolor: var(--nolp-chrome-bg);
+    --toolbar-color: var(--nolp-chrome-fg);
+    --lwt-accent-color: var(--nolp-chrome-bg);
+    --lwt-text-color: var(--nolp-chrome-fg);
+    --toolbar-field-border-color: var(--nolp-chrome-edge);
+    --focus-outline-color: var(--nolp-accent);
   }
 }
