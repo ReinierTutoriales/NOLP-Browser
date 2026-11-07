@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       build_firefox:
-        description: 'Run resource-intensive Firefox source build'
+        description: 'Build Firefox UI with Mozilla artifact mode'
         type: boolean
         required: true
         default: false
@@ -40,15 +40,11 @@ jobs:
           print("Manifest and shell syntax validated:",rev)
           PY
 
-  source-build:
+  ui-artifact-build:
     if: github.event_name == 'workflow_dispatch' && inputs.build_firefox
     needs: validate
     runs-on: ubuntu-24.04
-    timeout-minutes: 180
-    env:
-      CCACHE_DIR: ${{ github.workspace }}/.ccache
-      CCACHE_MAXSIZE: 2G
-      MOZ_PARALLEL_BUILD: '2'
+    timeout-minutes: 90
     permissions:
       contents: read
     steps:
@@ -58,14 +54,7 @@ jobs:
           df -h .
           free -h
       - name: Install build prerequisites
-        run: sudo apt-get update && sudo apt-get install -y python3 python3-venv git make curl ccache
-      - name: Restore compiler cache
-        uses: actions/cache@v4
-        with:
-          path: .ccache
-          key: firefox-159-linux-ccache-${{ github.sha }}
-          restore-keys: |
-            firefox-159-linux-ccache-
+        run: sudo apt-get update && sudo apt-get install -y python3 python3-venv git make curl
       - name: Fetch pinned upstream
         run: |
           REV=$(python3 -c 'import tomllib;print(tomllib.load(open("engine/upstream-manifest/firefox.toml","rb"))["firefox"]["revision"])')
@@ -82,27 +71,19 @@ jobs:
         run: |
           python3 scripts/apply-nolp-theme-selector.py --firefox-dir .upstream/firefox
           python3 scripts/apply-nolp-theme-selector.py --firefox-dir .upstream/firefox --check
-      - name: Configure Firefox source build
+      - name: Configure Mozilla UI artifact build
         run: |
           cat > .upstream/firefox/mozconfig <<'EOF'
+          ac_add_options --enable-artifact-builds
           ac_add_options --disable-debug
-          ac_add_options --disable-tests
-          ac_add_options --with-ccache=/usr/bin/ccache
           mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj-nolp
           EOF
-      - name: Bootstrap build dependencies
+      - name: Bootstrap Mozilla artifact build dependencies
         working-directory: .upstream/firefox
-        run: ./mach bootstrap --application-choice browser
-      - name: Build patched Firefox from source
+        run: ./mach bootstrap --application-choice browser_artifact_mode
+      - name: Build patched Firefox UI resources
         working-directory: .upstream/firefox
-        run: |
-          echo "Build resources: $(nproc) CPUs; parallel jobs capped at ${MOZ_PARALLEL_BUILD}"
-          df -h .
-          free -h
-          ./mach build -j "${MOZ_PARALLEL_BUILD}"
-      - name: Report compiler cache statistics
-        if: always()
-        run: ccache --show-stats || true
+        run: ./mach build
       - name: Smoke test built Firefox executable
         working-directory: .upstream/firefox
         env:
@@ -131,4 +112,4 @@ jobs:
         if: always()
         run: |
           git -C .upstream/firefox rev-parse HEAD || true
-          echo "This is a patched Firefox source build for validation, not a signed NOLP release."
+          echo "This is Mozilla artifact-mode UI validation, not a full Gecko compilation or signed NOLP release."
