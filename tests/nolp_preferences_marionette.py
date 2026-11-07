@@ -113,7 +113,8 @@ def select(driver, mode):
         state = active_theme_state(driver, mode)
         ui = driver.execute_script(
             "const s=document.getElementById('nolp-theme-select');"
-            "return {value:s?.value, disabled:s?.disabled, url:location.href}"
+            "return {value:s?.value, disabled:s?.disabled, url:location.href, "
+            "diagnostics:window.__nolpThemeDiagnostics ?? null}"
         )
         raise AssertionError(
             f"Theme {mode} activation failed: AddonManager={state!r}, UI={ui!r}"
