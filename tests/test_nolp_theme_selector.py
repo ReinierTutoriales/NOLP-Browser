@@ -50,6 +50,18 @@ class ThemeSelectorTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "official logo differs"):
             selector.apply(self.root, check=True)
 
+    def test_missing_source_fails_without_modifying_upstream(self):
+        original = selector.SOURCE
+        with tempfile.TemporaryDirectory() as missing:
+            selector.SOURCE = Path(missing)
+            self.addCleanup(setattr, selector, "SOURCE", original)
+            page = (self.root / selector.PREFS).read_bytes()
+            manifest = (self.root / selector.JAR).read_bytes()
+            with self.assertRaisesRegex(ValueError, "source resource missing"):
+                selector.apply(self.root)
+            self.assertEqual(page, (self.root / selector.PREFS).read_bytes())
+            self.assertEqual(manifest, (self.root / selector.JAR).read_bytes())
+
     def test_auto_is_native_default_theme(self):
         controller = (selector.SOURCE / "NolpThemeSelector.sys.mjs").read_text()
         self.assertIn('auto: "default-theme@mozilla.org"', controller)
