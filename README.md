@@ -6,7 +6,7 @@
 
 # NOLP
 
-**Next · Óptima · Local · Privada**
+**Nex · Óptimo · Local · Privado**
 
 > Un navegador pensado para ofrecer rendimiento, autonomía y privacidad sin depender innecesariamente de servicios en la nube.
 
@@ -14,10 +14,10 @@
 
 ## ¿Qué significa NOLP?
 
-- **N — Nextt:** siguiente generación (*next-generation*).
-- **O — Óptima:** rendimiento y eficiencia.
+- **N — Nex:** siguiente generación (*next-generation*).
+- **O — Óptimo:** rendimiento y eficiencia.
 - **L — Local:** tecnología *local-first*.
-- **P — Privada:** privacidad desde el diseño (*privacy-first*).
+- **P — Privado:** privacidad desde el diseño (*privacy-first*).
 
 Esta es la interpretación oficial del acrónimo NOLP. No sustituirla por «Navegador Óptimo Local y Privado» ni por otras expansiones.
 
@@ -71,6 +71,10 @@ La referencia central para saber exactamente **qué existe, qué falta y cómo c
 - [ ] Publicar versiones reproducibles y documentación de seguridad.
 
 La prioridad será disponer primero de una base verificable y mantenible, antes de añadir funcionalidades avanzadas.
+
+## Política vigente de interfaz
+
+NOLP utiliza únicamente temas **claro** y **oscuro**, con detección automática de la preferencia del sistema y selección manual. **Aero y Acrylic personalizados quedan descartados**: no forman parte de la arquitectura ni del plan de implementación. La interfaz debe priorizar superficies nativas estables, legibilidad, accesibilidad y rendimiento. Los efectos de transparencia o desenfoque no son requisitos y no se introducirán sin una evaluación específica por plataforma y mediciones de rendimiento.
 
 ## Identidad visual
 
