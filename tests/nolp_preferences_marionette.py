@@ -65,11 +65,11 @@ THEME_IDS = {
 }
 
 
-def assert_active_theme(driver, mode):
-    """Check the active add-on through Firefox's privileged AddonManager."""
+def active_theme_state(driver, mode):
+    """Read Firefox's actual theme state through privileged Marionette."""
     driver.set_context("chrome")
     try:
-        active = driver.execute_async_script("""
+        return driver.execute_async_script("""
             const done = arguments[arguments.length - 1];
             (async () => {
               const { AddonManager } = ChromeUtils.importESModule(
@@ -81,6 +81,10 @@ def assert_active_theme(driver, mode):
         """, THEME_IDS[mode])
     finally:
         driver.set_context("content")
+
+
+def assert_active_theme(driver, mode):
+    active = active_theme_state(driver, mode)
     assert active == {"active": True, "type": "theme"}, (
         f"Theme {mode} is not active in AddonManager: {active!r}"
     )
@@ -99,8 +103,11 @@ def select(driver, mode):
             "return s && !s.disabled && s.value === arguments[0]", mode
         )
     )
-    # Verify the real theme in privileged chrome, not only the select element.
-    assert_active_theme(driver, mode)
+    # Theme activation is asynchronous: the select's value changes before
+    # AddonManager finishes enabling the built-in theme.
+    WebDriverWait(driver, 30).until(
+        lambda d: active_theme_state(d, mode) == {"active": True, "type": "theme"}
+    )
     driver.refresh()
     WebDriverWait(driver, 30).until(
         lambda d: d.execute_script(
