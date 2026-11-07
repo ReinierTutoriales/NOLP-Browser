@@ -28,7 +28,7 @@ def apply(root: Path, check: bool = False) -> None:
     page, manifest = prefs.read_text(), jar.read_text()
     if SCRIPT_ANCHOR not in page or BODY_ANCHOR not in page or JAR_ANCHOR not in manifest:
         raise ValueError("Firefox preferences layout changed")
-    entries = [f"   content/browser/preferences/nolp/{name}" for name in RESOURCES]
+    entries = [f"   content/browser/preferences/nolp/{name} (nolp/{name})" for name in RESOURCES]
     dest = prefs.parent / "nolp"
     for name in RESOURCES:
         if (dest / name).exists() and (dest / name).read_bytes() != (SOURCE / name).read_bytes():
