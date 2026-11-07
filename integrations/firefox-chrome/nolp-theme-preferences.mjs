@@ -2,8 +2,10 @@
 import { AddonManager } from "resource://gre/modules/AddonManager.sys.mjs";
 import { getNolpTheme, setNolpTheme } from "chrome://browser/content/preferences/nolp/NolpThemeSelector.sys.mjs";
 
+window.__nolpThemeDiagnostics = { loaded: true, attached: false, error: null };
 const select = document.getElementById("nolp-theme-select");
 if (select) {
+  window.__nolpThemeDiagnostics.attached = true;
   let generation = 0;
   const refresh = async () => {
     const current = ++generation;
@@ -42,6 +44,7 @@ if (select) {
     try {
       await setNolpTheme(value, AddonManager);
     } catch (error) {
+      window.__nolpThemeDiagnostics.error = String(error);
       console.error("NOLP theme selection failed", error);
     } finally {
       try {
