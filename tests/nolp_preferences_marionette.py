@@ -97,14 +97,16 @@ with tempfile.TemporaryDirectory(prefix="nolp-marionette-") as tmp:
             select(driver, mode)
             driver.save_screenshot(str(ARTIFACTS / f"preferences-{mode}.png"))
             print(f"PASS: NOLP theme {mode} survives preferences reload", flush=True)
+            driver.quit()
+            driver = None
+            # Each theme must survive a full browser restart using the same profile.
+            driver = launch(profile)
+            actual = picker(driver)
+            assert actual == mode, (
+                f"Theme {mode} lost after restart: {actual!r}"
+            )
+            assert_active_theme(driver, mode)
+            print(f"PASS: NOLP {mode} theme persisted after Firefox restart", flush=True)
     finally:
-        driver.quit()
-    # Restart Firefox against the same on-disk profile.
-    driver = launch(profile)
-    try:
-        actual = picker(driver)
-        assert actual == "auto", f"Theme lost after restart: {actual!r}"
-        assert_active_theme(driver, "auto")
-        print("PASS: NOLP auto theme persisted after Firefox restart", flush=True)
-    finally:
-        driver.quit()
+        if driver is not None:
+            driver.quit()
