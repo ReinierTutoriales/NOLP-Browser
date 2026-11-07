@@ -32,14 +32,29 @@ def picker(driver):
     # Use the browser's trusted-tab API through Marionette chrome context.
     driver.set_context("chrome")
     try:
+        # Reuse the existing tab: opening a new tab does not switch the
+        # WebDriver browsing context to it automatically.
         driver.execute_script(
-            "gBrowser.selectedTab = gBrowser.addTrustedTab('about:preferences');"
+            "gBrowser.loadURI('about:preferences', {triggeringPrincipal: "
+            "Services.scriptSecurityManager.getSystemPrincipal()});"
         )
     finally:
         driver.set_context("content")
-    WebDriverWait(driver, 30).until(
-        lambda d: d.execute_script("return !!document.getElementById('nolp-theme-select')")
-    )
+    try:
+        WebDriverWait(driver, 30).until(
+            lambda d: d.execute_script(
+                "return location.href.startsWith('about:preferences') && "
+                "!!document.getElementById('nolp-theme-select')"
+            )
+        )
+    except Exception:
+        details = driver.execute_script(
+            "return {url: location.href, readyState: document.readyState, "
+            "mainPane: !!document.getElementById('mainPrefPane'), "
+            "picker: !!document.getElementById('nolp-theme-select')}"
+        )
+        driver.save_screenshot(str(ARTIFACTS / "preferences-failure.png"))
+        raise AssertionError(f"NOLP preferences selector unavailable: {details!r}") from None
     return driver.execute_script("return document.getElementById('nolp-theme-select').value")
 
 
