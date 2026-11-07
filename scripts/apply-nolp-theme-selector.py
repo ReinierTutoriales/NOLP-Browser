@@ -6,27 +6,27 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "integrations/firefox-chrome"
 OFFICIAL_LOGO = ROOT / "assets/brand/nolp-official.png"
+STYLE_ENTRY = "   content/browser/preferences/nolp/nolp-brand-preferences.css (nolp/nolp-brand-preferences.css)"
+STYLE = '<html:link rel="stylesheet" href="chrome://browser/content/preferences/nolp/nolp-brand-preferences.css"/>'
 LOGO_ENTRY = "   content/browser/preferences/nolp/nolp-official.png (nolp/nolp-official.png)"
 PREFS = Path("browser/components/preferences/preferences.xhtml")
 JAR = Path("browser/components/preferences/jar.mn")
 SCRIPT_ANCHOR = '<script src="chrome://browser/content/preferences/preferences.js"/>'
 SCRIPT = '<script type="module" src="chrome://browser/content/preferences/nolp/nolp-theme-preferences.mjs"></script>'
 BODY_ANCHOR = '<vbox id="mainPrefPane">'
-CONTROL = '''<html:div id="nolp-theme-preferences" role="group" aria-label="NOLP appearance"
-          style="display:flex;flex-direction:column;align-items:center;gap:14px;width:100%;box-sizing:border-box;padding:16px 0;">
-          <html:div style="display:flex;align-items:center;justify-content:center;width:min(100%,192px);aspect-ratio:1;overflow:hidden;">
-            <html:img src="chrome://browser/content/preferences/nolp/nolp-official.png"
-              alt="NOLP" style="display:block;width:100%;height:100%;object-fit:contain;object-position:center;"/>
+CONTROL = '''<html:div id="nolp-theme-preferences" role="group" aria-label="NOLP appearance">
+          <html:div id="nolp-brand-mark">
+            <html:img src="chrome://browser/content/preferences/nolp/nolp-official.png" alt="NOLP"/>
           </html:div>
-          <html:label for="nolp-theme-select" style="text-align:center;font-weight:600;">NOLP · Apariencia</html:label>
-          <html:select id="nolp-theme-select" aria-label="NOLP theme" style="max-width:100%;min-width:min(100%,220px);">
+          <html:label for="nolp-theme-select">NOLP · Apariencia</html:label>
+          <html:select id="nolp-theme-select" aria-label="NOLP theme">
             <html:option value="auto">Automático (sistema)</html:option>
             <html:option value="light">NOLP Light</html:option>
             <html:option value="dark">NOLP Dark</html:option>
           </html:select>
         </html:div>'''
 JAR_ANCHOR = "   content/browser/preferences/preferences.js"
-RESOURCES = ("NolpThemeSelector.sys.mjs", "nolp-theme-preferences.mjs")
+RESOURCES = ("NolpThemeSelector.sys.mjs", "nolp-theme-preferences.mjs", "nolp-brand-preferences.css")
 
 
 def apply(root: Path, check: bool = False) -> None:
@@ -44,13 +44,15 @@ def apply(root: Path, check: bool = False) -> None:
         if (dest / name).exists() and (dest / name).read_bytes() != (SOURCE / name).read_bytes():
             raise ValueError("Existing NOLP resource differs")
     if check:
-        if LOGO_ENTRY not in manifest or not (dest / "nolp-official.png").is_file():
+        if LOGO_ENTRY not in manifest or STYLE_ENTRY not in manifest or STYLE not in page or not (dest / "nolp-official.png").is_file():
             raise ValueError("NOLP logo resource not installed")
         if SCRIPT not in page or CONTROL not in page or any(e not in manifest for e in entries):
             raise ValueError("NOLP theme picker not installed")
         if any(not (dest / name).is_file() for name in RESOURCES):
             raise ValueError("NOLP theme picker resource missing")
         return
+    if STYLE not in page:
+        page = page.replace(SCRIPT_ANCHOR, STYLE + "\n  " + SCRIPT_ANCHOR, 1)
     if SCRIPT not in page:
         page = page.replace(SCRIPT_ANCHOR, SCRIPT_ANCHOR + "\n  " + SCRIPT, 1)
     if CONTROL not in page:
@@ -58,6 +60,8 @@ def apply(root: Path, check: bool = False) -> None:
     for entry in entries:
         if entry not in manifest:
             manifest = manifest.replace(JAR_ANCHOR, JAR_ANCHOR + "\n" + entry, 1)
+    if STYLE_ENTRY not in manifest:
+        manifest = manifest.replace(JAR_ANCHOR, JAR_ANCHOR + "\n" + STYLE_ENTRY, 1)
     if LOGO_ENTRY not in manifest:
         manifest = manifest.replace(JAR_ANCHOR, JAR_ANCHOR + "\n" + LOGO_ENTRY, 1)
     prefs.write_text(page)
