@@ -35,8 +35,8 @@ def picker(driver):
         # Reuse the existing tab: opening a new tab does not switch the
         # WebDriver browsing context to it automatically.
         driver.execute_script(
-            "gBrowser.loadURI('about:preferences', {triggeringPrincipal: "
-            "Services.scriptSecurityManager.getSystemPrincipal()});"
+            "gBrowser.loadURI(Services.io.newURI('about:preferences'), "
+            "{triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal()});"
         )
     finally:
         driver.set_context("content")
