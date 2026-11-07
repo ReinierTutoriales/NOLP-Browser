@@ -108,7 +108,7 @@ jobs:
           python3 - <<'PY'
           import pathlib, struct
           image = pathlib.Path("../../ui-validation/preferences.png").read_bytes()
-          assert image.startswith(b"\\x89PNG\\r\\n\\x1a\\n"), "Preferences screenshot missing or invalid"
+          assert image[:8] == bytes((137, 80, 78, 71, 13, 10, 26, 10)), "Preferences screenshot missing or invalid"
           width, height = struct.unpack(">II", image[16:24])
           assert width >= 800 and height >= 600, (width, height)
           print(f"Preferences screenshot captured: {width}x{height}")
