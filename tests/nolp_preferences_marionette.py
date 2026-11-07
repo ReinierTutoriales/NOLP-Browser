@@ -70,12 +70,13 @@ def active_theme_state(driver, mode):
     driver.set_context("chrome")
     try:
         return driver.execute_async_script("""
+            const themeId = arguments[0];
             const done = arguments[arguments.length - 1];
             (async () => {
               const { AddonManager } = ChromeUtils.importESModule(
                 "resource://gre/modules/AddonManager.sys.mjs"
               );
-              const addon = await AddonManager.getAddonByID(arguments[0]);
+              const addon = await AddonManager.getAddonByID(themeId);
               done({ active: addon?.isActive ?? false, type: addon?.type ?? null });
             })().catch(error => done({ error: String(error) }));
         """, THEME_IDS[mode])
