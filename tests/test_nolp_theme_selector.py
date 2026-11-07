@@ -36,6 +36,20 @@ class ThemeSelectorTests(unittest.TestCase):
             )
             self.assertTrue((self.root / selector.JAR).parent.joinpath("nolp", name).is_file())
 
+    def test_check_rejects_stale_resource(self):
+        selector.apply(self.root)
+        resource = (self.root / selector.JAR).parent / "nolp" / selector.RESOURCES[0]
+        resource.write_bytes(b"stale theme implementation")
+        with self.assertRaisesRegex(ValueError, "differs"):
+            selector.apply(self.root, check=True)
+
+    def test_check_rejects_modified_official_logo(self):
+        selector.apply(self.root)
+        logo = (self.root / selector.JAR).parent / "nolp" / "nolp-official.png"
+        logo.write_bytes(b"invalid logo")
+        with self.assertRaisesRegex(ValueError, "official logo differs"):
+            selector.apply(self.root, check=True)
+
     def test_auto_is_native_default_theme(self):
         controller = (selector.SOURCE / "NolpThemeSelector.sys.mjs").read_text()
         self.assertIn('auto: "default-theme@mozilla.org"', controller)
