@@ -79,7 +79,7 @@ jobs:
           EOF
       - name: Bootstrap build dependencies
         working-directory: .upstream/firefox
-        run: ./mach bootstrap --application-choice browser --no-interactive
+        run: ./mach bootstrap --application-choice browser
       - name: Build patched Firefox from source
         working-directory: .upstream/firefox
         run: ./mach build
