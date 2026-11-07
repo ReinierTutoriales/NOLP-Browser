@@ -90,7 +90,8 @@ def install(root: Path, check: bool = False) -> None:
     if bounds is None:
         raise ValueError("Official NOLP logo has no visible pixels")
     image = image.crop(bounds)
-    # Only application icons: do not overwrite private browsing, installer art,\n    # tile backgrounds, or unrelated PNG resources.\n    icons = sorted(target.glob("default[0-9]*.png"))
+    # Only application icons: preserve private browsing and installer artwork.
+    icons = sorted(target.glob("default[0-9]*.png"))
     if not icons:
         raise ValueError("No PNG assets in Firefox unofficial branding")
     for path in icons:
