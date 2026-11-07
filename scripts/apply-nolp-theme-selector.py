@@ -12,11 +12,16 @@ JAR = Path("browser/components/preferences/jar.mn")
 SCRIPT_ANCHOR = '<script src="chrome://browser/content/preferences/preferences.js"/>'
 SCRIPT = '<script type="module" src="chrome://browser/content/preferences/nolp/nolp-theme-preferences.mjs"></script>'
 BODY_ANCHOR = '<vbox id="mainPrefPane">'
-CONTROL = '''<html:div id="nolp-theme-preferences" role="group" aria-label="NOLP appearance">
-          <html:img src="chrome://browser/content/preferences/nolp/nolp-official.png" alt="NOLP" width="48" height="48" style="object-fit:contain;vertical-align:middle;margin-inline-end:12px;"/>
-          <html:label for="nolp-theme-select">NOLP · Apariencia</html:label>
-          <html:select id="nolp-theme-select" aria-label="NOLP theme">
-            <html:option value="auto">Automático (sistema)</html:option>\n            <html:option value="light">NOLP Light</html:option>
+CONTROL = '''<html:div id="nolp-theme-preferences" role="group" aria-label="NOLP appearance"
+          style="display:flex;flex-direction:column;align-items:center;gap:14px;width:100%;box-sizing:border-box;padding:16px 0;">
+          <html:div style="display:flex;align-items:center;justify-content:center;width:min(100%,192px);aspect-ratio:1;overflow:hidden;">
+            <html:img src="chrome://browser/content/preferences/nolp/nolp-official.png"
+              alt="NOLP" style="display:block;width:100%;height:100%;object-fit:contain;object-position:center;"/>
+          </html:div>
+          <html:label for="nolp-theme-select" style="text-align:center;font-weight:600;">NOLP · Apariencia</html:label>
+          <html:select id="nolp-theme-select" aria-label="NOLP theme" style="max-width:100%;min-width:min(100%,220px);">
+            <html:option value="auto">Automático (sistema)</html:option>
+            <html:option value="light">NOLP Light</html:option>
             <html:option value="dark">NOLP Dark</html:option>
           </html:select>
         </html:div>'''
