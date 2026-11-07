@@ -22,6 +22,14 @@ class FirefoxChromeOverlayTests(unittest.TestCase):
         css.write_text('/* browser theme */\n' + module.ANCHOR + '\n', encoding="utf-8")
         jar.write_text('  ' + module.JAR_ANCHOR + ' (../shared/browser-shared.css)\n', encoding="utf-8")
 
+    def test_nolp_chrome_css_has_no_web_content_or_forced_color_override(self):
+        source = module.SOURCE.read_text(encoding="utf-8")
+        self.assertIn("@media not (forced-colors)", source)
+        self.assertIn("light-dark(", source)
+        self.assertNotIn("!important", source)
+        self.assertNotIn("backdrop-filter", source)
+        self.assertNotIn("browser.xhtml", source)
+
     def test_install_and_verify(self):
         module.apply(self.root)
         module.apply(self.root, check=True)
