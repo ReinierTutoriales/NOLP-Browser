@@ -72,10 +72,16 @@ jobs:
         run: |
           python3 scripts/apply-nolp-theme-selector.py --firefox-dir .upstream/firefox
           python3 scripts/apply-nolp-theme-selector.py --firefox-dir .upstream/firefox --check
+      - name: Install NOLP native application branding
+        run: |
+          python3 -m pip install --break-system-packages "Pillow>=11,<13"
+          python3 scripts/apply-nolp-branding.py --firefox-dir .upstream/firefox
+          python3 scripts/apply-nolp-branding.py --firefox-dir .upstream/firefox --check
       - name: Configure Mozilla UI artifact build
         run: |
           cat > .upstream/firefox/mozconfig <<'EOF'
           ac_add_options --enable-artifact-builds
+          ac_add_options --with-branding=browser/branding/nolp
           ac_add_options --disable-debug
           mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj-nolp
           EOF
